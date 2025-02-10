@@ -74,9 +74,6 @@ export default function Login() {
     });
 
     const json = await res.json();
-    if (!json.success) {
-      throw new Error("Bad input");
-    }
 
     //authContext.setAuthToken(json.data.jwtToken);
     toast.success("Zalogowano", {

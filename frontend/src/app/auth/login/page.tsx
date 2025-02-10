@@ -51,22 +51,17 @@ export default function Login() {
   });
 
   const onSubmit = async (prop: any) => {
-    const res = await fetch("/api/panel/auth", {
+    const object = { email: prop.email, password: prop.password };
+    console.log(object);
+    const res = await fetch("http://localhost:3333/auth/signin", {
       method: "POST",
-      body: JSON.stringify(prop),
+      body: JSON.stringify(object),
       headers: {
         "Content-Type": "application/json",
       },
     });
 
     const json = await res.json();
-    if (!json.success) {
-      form.setError("root", {
-        type: "custom",
-        message: json.errors._errors.join(", "),
-      });
-      return;
-    }
 
     //authContext.setAuthToken(json.data.jwtToken);
     toast.success("Zalogowano", {
