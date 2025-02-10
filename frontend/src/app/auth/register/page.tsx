@@ -32,6 +32,7 @@ import {
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { error } from "console";
 const mySchema = z
   .object({
     nickname: z.string().min(3),
@@ -63,9 +64,10 @@ export default function Login() {
   });
 
   const onSubmit = async (prop: any) => {
-    const res = await fetch("/api/panel/auth", {
+    const object = { email: prop.email, password: prop.password };
+    const res = await fetch("http://localhost:3333/auth/signup", {
       method: "POST",
-      body: JSON.stringify(prop),
+      body: JSON.stringify(object),
       headers: {
         "Content-Type": "application/json",
       },
@@ -73,11 +75,7 @@ export default function Login() {
 
     const json = await res.json();
     if (!json.success) {
-      form.setError("root", {
-        type: "custom",
-        message: json.errors._errors.join(", "),
-      });
-      return;
+      throw new Error("Bad input");
     }
 
     //authContext.setAuthToken(json.data.jwtToken);
