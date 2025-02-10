@@ -23,22 +23,35 @@ model User {
 
   firstName String?
   lastName  String?
-  bookmarks  Bookmark[]
+  projects ProjectUser[]
 
   @@map("users")
+  
 }
 
-model Bookmark {
+model Project {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title       String
+  name       String
   description String?
-  link        String
+  projectCode String @unique
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
+  users ProjectUser[]
 
-  @@map("bookmarks")
+  // userId Int
+  // user   User @relation(fields: [userId], references: [id])
+
+  @@map("projects")
+}
+model ProjectUser {
+  userId    Int
+  projectId Int
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@id([userId, projectId]) 
+  @@map("project_users") 
 }

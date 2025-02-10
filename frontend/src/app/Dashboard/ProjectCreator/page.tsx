@@ -46,14 +46,14 @@ import { DatePicker } from "./DatePicker";
 import { Ghost } from "lucide-react";
 
 const mySchema = z.object({
-  projectName: z.string(),
+  name: z.string(),
   description: z.string(),
-  teamMembers: z.array(z.string()),
-  projectType: z.string(),
-  projectStatus: z.string(),
-  projectStartDate: z.string().date(),
-  projectEndDate: z.string().date(),
-  projectImage: z.string(),
+  teamMembers: z.array(z.string()).optional(),
+  projectType: z.string().optional(),
+  projectStatus: z.string().optional(),
+  projectStartDate: z.string().optional(),
+  projectEndDate: z.string().optional(),
+  projectImage: z.string().optional(),
 });
 export default function Login() {
   const router = useRouter();
@@ -61,7 +61,7 @@ export default function Login() {
   const form = useForm({
     resolver: zodResolver(mySchema),
     defaultValues: {
-      projectName: "",
+      name: "",
       description: "",
       teamMembers: [], //tutaj dac id usera
       projectType: "",
@@ -73,7 +73,8 @@ export default function Login() {
   });
 
   const onSubmit = async (prop: any) => {
-    const res = await fetch("/api/panel/auth", {
+    console.log(prop);
+    const res = await fetch("http://localhost:3333/project/create", {
       method: "POST",
       body: JSON.stringify(prop),
       headers: {
@@ -82,16 +83,9 @@ export default function Login() {
     });
 
     const json = await res.json();
-    if (!json.success) {
-      form.setError("root", {
-        type: "custom",
-        message: json.errors._errors.join(", "),
-      });
-      return;
-    }
 
     //authContext.setAuthToken(json.data.jwtToken);
-    toast.success("Zalogowano", {
+    toast.success("Projekt utworzony", {
       className:
         "!border-green-200 !bg-gradient-to-t !from-[#00ff0006] !to-[#00ff0002]",
       duration: 7 * 1000,
@@ -122,7 +116,7 @@ export default function Login() {
                 <div className="w-1/2 flex flex-col gap-6">
                   <FormField
                     control={form.control}
-                    name="projectName"
+                    name="name"
                     render={({ field }) => (
                       <FormItem className="w-4/5">
                         <FormLabel>Project name</FormLabel>
@@ -149,7 +143,9 @@ export default function Login() {
                       </FormItem>
                     )}
                   />
-                  <FormField
+                </div>
+              </div>
+              {/*<FormField
                     control={form.control}
                     name="projectType"
                     render={({ field }) => (
@@ -215,7 +211,7 @@ export default function Login() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
