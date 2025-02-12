@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import {
   createContext,
   useContext,
@@ -39,6 +40,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   const [accessToken, setAccessTokenState] = useState<string | null>(() =>
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : null
   );
+  const router = useRouter();
 
   // Function to update token and store in localStorage
   const setAccessToken = (token: string | null) => {
@@ -53,6 +55,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
   // Logout function
   const logout = () => {
+    router.push("/");
     setAccessToken(null);
   };
 
@@ -75,7 +78,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         if (!res.ok) throw new Error("Failed to fetch user");
 
         const json = await res.json();
-        console.log(json);
+
         setUser(json);
       } catch (error) {
         console.error("Error fetching user:", error);

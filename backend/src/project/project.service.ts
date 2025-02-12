@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ProjectDto } from './dto';
 import { JoinProjectDto } from './dto/joinproject.dto';
+import { GetProjectDto } from './dto/getproject.dto';
+import { GetProjectIdDto } from './dto/getprojectid.dto';
 
 @Injectable()
 export class ProjectService {
@@ -42,5 +44,31 @@ export class ProjectService {
         projectId: project.id,
       },
     });
+  }
+  async getProjectBasics(dto: GetProjectDto) {
+    const userProjects = await this.prisma.projectUser.findMany({
+      where: {
+        userId: dto.userid,
+      },
+      select: {
+        project: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+          },
+        },
+      },
+    });
+
+    return userProjects.map((p) => p.project); // Extracting the project details
+  }
+  async findById(dto: GetProjectIdDto) {
+    const project = await this.prisma.project.findUnique({
+      where: {
+        id: dto.id,
+      },
+    });
+    return project;
   }
 }

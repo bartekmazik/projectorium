@@ -10,19 +10,28 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-const ProjectCard = () => {
+// Destructure props to get `name` and `description`
+const ProjectCard = ({
+  id,
+  name,
+  description,
+}: {
+  id: number;
+  name: string;
+  description: string;
+}) => {
   return (
     <>
       <Card className="h-64 w-64 m-2">
         <CardHeader>
-          <CardTitle>Biwak</CardTitle>
-          <CardDescription>PANEUROPA</CardDescription>
+          <CardTitle>{name}</CardTitle>
+          <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent>
           <p>Status: active</p>
         </CardContent>
         <CardFooter>
-          <Link href="/Project">
+          <Link href={`/Project/${id}`}>
             <Button variant="ghost">Go to project</Button>
           </Link>
         </CardFooter>
