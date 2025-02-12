@@ -20,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 //import { ApiResponse } from "@/common/objects/apiResponse";
 import { ChangeEvent, ChangeEventHandler, useContext } from "react";
 //import { AuthContext } from "@/components/panel/authProvider";
+
 import {
   Form,
   FormControl,
@@ -28,10 +29,12 @@ import {
   FormLabel,
   FormMessage /*FormRootError*/,
 } from "@/components/ui/form";
+
 //import { toast } from "sonner";
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/lib/AuthProvider";
 
 const mySchema = z.object({
   email: z.string().email(),
@@ -40,6 +43,7 @@ const mySchema = z.object({
 });
 export default function Login() {
   const router = useRouter();
+  const { setAccessToken } = useUser();
 
   const form = useForm({
     resolver: zodResolver(mySchema),
@@ -52,7 +56,6 @@ export default function Login() {
 
   const onSubmit = async (prop: any) => {
     const object = { email: prop.email, password: prop.password };
-    console.log(object);
     const res = await fetch("http://localhost:3333/auth/signin", {
       method: "POST",
       body: JSON.stringify(object),
@@ -62,7 +65,7 @@ export default function Login() {
     });
 
     const json = await res.json();
-
+    setAccessToken(json.access_token);
     //authContext.setAuthToken(json.data.jwtToken);
     toast.success("Zalogowano", {
       className:

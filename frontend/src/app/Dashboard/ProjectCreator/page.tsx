@@ -18,7 +18,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 //import { ApiResponse } from "@/common/objects/apiResponse";
-import { ChangeEvent, ChangeEventHandler, useContext } from "react";
+import { ChangeEvent, ChangeEventHandler, useContext, useEffect } from "react";
 //import { AuthContext } from "@/components/panel/authProvider";
 
 import {
@@ -44,10 +44,12 @@ import {
 } from "@/components/ui/select";
 import { DatePicker } from "./DatePicker";
 import { Ghost } from "lucide-react";
+import { useUser } from "@/lib/AuthProvider";
 
 const mySchema = z.object({
   name: z.string(),
   description: z.string(),
+  userId: z.number(),
   teamMembers: z.array(z.string()).optional(),
   projectType: z.string().optional(),
   projectStatus: z.string().optional(),
@@ -57,23 +59,30 @@ const mySchema = z.object({
 });
 export default function Login() {
   const router = useRouter();
+  const { user } = useUser();
 
   const form = useForm({
     resolver: zodResolver(mySchema),
     defaultValues: {
       name: "",
       description: "",
-      teamMembers: [], //tutaj dac id usera
-      projectType: "",
-      projectStatus: "",
-      projectStartDate: "",
-      projectEndDate: "",
-      projectImage: "",
+      userId: user?.id,
+      // projectType: "",
+      // projectStatus: "",
+      // projectStartDate: "",
+      // projectEndDate: "",
+      // projectImage: "",
     },
   });
+  useEffect(() => {
+    if (user?.id) {
+      form.setValue("userId", user.id);
+    }
+  }, [user?.id]);
 
   const onSubmit = async (prop: any) => {
     console.log(prop);
+
     const res = await fetch("http://localhost:3333/project/create", {
       method: "POST",
       body: JSON.stringify(prop),
@@ -81,8 +90,8 @@ export default function Login() {
         "Content-Type": "application/json",
       },
     });
-
-    const json = await res.json();
+    const json = res.json();
+    console.log(json);
 
     //authContext.setAuthToken(json.data.jwtToken);
     toast.success("Projekt utworzony", {

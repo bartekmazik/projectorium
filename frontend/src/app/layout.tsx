@@ -5,24 +5,23 @@ import { Navbar } from "@/components/navbar";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Sidebar from "@/components/sidebar";
-import { wrapper, store } from "../store/store";
-import { Provider } from "react-redux";
 
 import "@/styles/globals.css";
+import { UserProvider } from "@/lib/AuthProvider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
-function Layout({ children }: { children: ReactNode }) {
+export default function Layout({ children }: { children: ReactNode }) {
   const [isDark, setIsDark] = useState(false);
 
   return (
     <html lang="en">
       <body className={`${isDark === true ? "dark" : ""}`}>
         <main className="flex flex-col w-full">
-          <Provider store={store}>
+          <UserProvider>
             <Navbar setIsDark={setIsDark} isDark={isDark} />
             <div className="flex flex-row">
               <Sidebar />
@@ -36,11 +35,9 @@ function Layout({ children }: { children: ReactNode }) {
               </div>
             </div>
             {/* <Footer /> */}
-          </Provider>
+          </UserProvider>
         </main>
       </body>
     </html>
   );
 }
-
-export default wrapper.withRedux(Layout);

@@ -1,4 +1,3 @@
-"use client";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -7,11 +6,11 @@ import {
   NavigationMenuTrigger,
   NavigationMenuContent,
 } from "@/components/ui/navigation-menu";
-import { EditIcon, User, User2 } from "lucide-react";
+import { EditIcon, User2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { navigationMenuTriggerStyle } from "./ui/navigation-menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
 export function Navbar({
@@ -47,6 +46,7 @@ export function Navbar({
                 <Moon fill="" stroke="" className="fill-primary" size={20} />
               )}
             </Button>
+
             {isLogged ? (
               <Link href="/login">
                 <Button variant="ghost">

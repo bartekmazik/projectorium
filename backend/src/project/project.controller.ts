@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { ProjectDto } from './dto';
+import { JoinProjectDto } from './dto/joinproject.dto';
 
 @Controller('project')
 export class ProjectController {
@@ -9,6 +10,8 @@ export class ProjectController {
   createProject(@Body() dto: ProjectDto) {
     return this.projectService.createProject(dto);
   }
-
-  //   @Post('access')
+  @Post('join')
+  joinProject(@Body() dto: JoinProjectDto) {
+    return this.projectService.joinProject(dto);
+  }
 }

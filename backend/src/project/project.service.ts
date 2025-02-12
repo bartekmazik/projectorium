@@ -7,19 +7,22 @@ import { JoinProjectDto } from './dto/joinproject.dto';
 export class ProjectService {
   constructor(private prisma: PrismaService) {}
   async createProject(dto: ProjectDto) {
-    await this.prisma.project.create({
+    const project = await this.prisma.project.create({
       data: {
         name: dto.name,
         description: dto.description,
         projectCode: String(Math.random()).slice(2, 8),
+        users: {
+          create: [{ userId: dto.userId }],
+        },
       },
     });
-    return 'Project created';
+    return { message: 'Project created', project };
   }
   async joinProject(dto: JoinProjectDto) {
     const user = await this.prisma.user.findUnique({
       where: {
-        email: dto.email,
+        id: dto.userid,
       },
     });
     if (!user) {
