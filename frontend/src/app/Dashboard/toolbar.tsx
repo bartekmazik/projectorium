@@ -1,20 +1,65 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useUser } from "@/lib/AuthProvider";
+
+const mySchema = z.object({
+  code: z.string().min(1, "Code is required"),
+});
+
 const JoinProject = () => {
+  const { user } = useUser();
+  const [open, setOpen] = useState(false);
+
+  const form = useForm({
+    resolver: zodResolver(mySchema),
+    defaultValues: {
+      code: "",
+    },
+  });
+
+  const onSubmit = async (data: { code: string }) => {
+    try {
+      const object = { userid: user?.id, code: data.code };
+      const res = await fetch("http://localhost:3333/project/join", {
+        method: "POST",
+        body: JSON.stringify(object),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to join project");
+      }
+
+      form.reset(); // Reset the form
+      setOpen(false); // Close the dialog
+    } catch (error) {
+      console.error("Error joining project:", error);
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Join project</Button>
       </DialogTrigger>
@@ -22,13 +67,28 @@ const JoinProject = () => {
         <DialogHeader>
           <DialogTitle>Enter project code</DialogTitle>
         </DialogHeader>
-        <div>
-          <Input />
-        </div>
-        <div>TUTAJ BEDIZE PREVIEW PROJEKTU O ILE WYSZUKA</div>
-        <DialogFooter>
-          <Button type="submit">Join</Button>
-        </DialogFooter>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Project Code</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <DialogFooter>
+              <Button type="submit">Join</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

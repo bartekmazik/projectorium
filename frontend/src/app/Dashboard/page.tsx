@@ -3,18 +3,20 @@ import React, { useEffect, useState } from "react";
 import ProjectCard from "@/components/project/ProjectCard";
 import Toolbar from "@/app/Dashboard/toolbar";
 import { useUser } from "@/lib/AuthProvider";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [projects, setProjects] = useState([]);
   const { user } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
-    const GetProjects = async () => {
-      if (!user) {
-        console.log("Login before getting projects");
-        return;
-      }
+    if (!user) {
+      router.push("/");
+      return;
+    }
 
+    const GetProjects = async () => {
       try {
         const res = await fetch("http://localhost:3333/project/projects", {
           method: "POST",
@@ -37,7 +39,7 @@ const Page = () => {
     if (user?.id) {
       GetProjects();
     }
-  }, [user]);
+  }, [user, router]);
 
   return (
     <>
@@ -46,7 +48,7 @@ const Page = () => {
         {projects.length > 0 ? (
           projects.map((project) => (
             <ProjectCard
-              key={project.id} // Always provide a unique key
+              key={project.id}
               id={project.id}
               name={project.name}
               description={project.description}

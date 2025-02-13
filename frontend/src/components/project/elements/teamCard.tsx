@@ -12,12 +12,7 @@ import Link from "next/link";
 import { CircleUserRound } from "lucide-react";
 import { UserPlus } from "lucide-react";
 
-interface Member {
-  username: string;
-  id: number;
-}
-
-const Member = (props: Member) => {
+const Member = (props: { username: string }) => {
   return (
     <>
       <div className="flex flex-row items-center justify-between  py-1 ">
@@ -30,7 +25,7 @@ const Member = (props: Member) => {
   );
 };
 
-const TeamCard = () => {
+const TeamCard = ({ users }: any) => {
   return (
     <>
       <Card className=" w-64 m-2 flex flex-col justify-between">
@@ -40,12 +35,9 @@ const TeamCard = () => {
             <Button variant="ghost">Edit</Button>
           </CardHeader>
           <CardContent>
-            <ul>
-              <Member username={"John Dohea"} id={32} />
-              <Member username={"Jack Willow"} id={33} />
-              <Member username={"Dwayne Johnson"} id={32} />
-              <Member username={"Robert Pick"} id={32} />
-            </ul>
+            {users.map((username, i) => {
+              return <Member username={username} key={i} />;
+            })}
           </CardContent>
         </div>
         <CardFooter className="flex flex-row justify-center">

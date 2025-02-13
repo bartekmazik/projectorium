@@ -22,9 +22,7 @@ const Task = () => {
           <p>Przeniesc cegly na dach</p>
           <CardDescription>Status: aktywny</CardDescription>
         </div>
-        <div>
-          <Button variant="ghost">Edit</Button>
-        </div>
+        <div>Go to task</div>
       </Button>
     </>
   );

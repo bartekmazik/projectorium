@@ -69,6 +69,21 @@ export class ProjectService {
         id: dto.id,
       },
     });
-    return project;
+    const team = await this.prisma.projectUser.findMany({
+      where: {
+        projectId: dto.id,
+      },
+      select: {
+        user: {
+          select: {
+            email: true,
+          },
+        },
+      },
+    });
+    return {
+      project: project,
+      members: team.map((teamMember) => teamMember.user.email),
+    };
   }
 }

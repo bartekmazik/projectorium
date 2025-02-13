@@ -9,9 +9,7 @@ import {
 
 import Link from "next/link";
 import { Button } from "./ui/button";
-
-import { useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Bell } from "lucide-react";
 import { useUser } from "@/lib/AuthProvider";
 
 function Dropdown() {
@@ -42,7 +40,6 @@ export function Navbar({
   setIsDark: any;
   isDark: boolean;
 }) {
-  const [dropdown, setDropdown] = useState(false);
   const { user } = useUser();
 
   const handleDarkMode = () => {
@@ -69,9 +66,20 @@ export function Navbar({
                 <Moon fill="" stroke="" className="fill-primary" size={20} />
               )}
             </Button>
-
             {user ? (
-              <Dropdown />
+              <div className="flex flex-row justify-center items-center gap-2">
+                <Link href="/notifications">
+                  <Button variant={"ghost"}>
+                    <Bell
+                      fill=""
+                      stroke=""
+                      className="fill-primary"
+                      size={20}
+                    />
+                  </Button>
+                </Link>
+                <Dropdown />
+              </div>
             ) : (
               <Link href="/auth/login">
                 <Button variant="ghost">Login</Button>
