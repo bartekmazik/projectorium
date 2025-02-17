@@ -8,22 +8,23 @@ import LinksCard from "@/components/project/elements/linksCard";
 import NotesCard from "@/components/project/elements/notesCard";
 import FinancesCard from "@/components/project/elements/financesCard";
 import { useParams } from "next/navigation";
+import { useUser } from "@/lib/AuthProvider";
 
 const Page = () => {
   const { id } = useParams();
+  const { accessToken } = useUser();
   const [project, setProject] = useState(null);
 
   useEffect(() => {
-    if (!id) return;
+    // if (!id) return;
 
     const fetchData = async () => {
       const projectId = Number(id);
+      console.log(id);
       try {
-        const res = await fetch("http://localhost:3333/project/getproject", {
-          method: "POST",
-          body: JSON.stringify({ id: projectId }),
+        const res = await fetch(`http://localhost:3333/project/${id}`, {
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}` || "",
           },
         });
 
@@ -46,7 +47,7 @@ const Page = () => {
       </div>
       <div className="flex flex-row flex-wrap p-5 overflow-visible gap-3">
         <TeamCard users={project?.members || []} />
-        <TasksCard />
+        <TasksCard id={id as string} />
         {/* <CalendarCard />
         <LinksCard />
         <NotesCard />

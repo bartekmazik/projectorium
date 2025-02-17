@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [projects, setProjects] = useState([]);
-  const { user } = useUser();
+  const { user, accessToken } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -21,7 +21,10 @@ const Page = () => {
         const res = await fetch("http://localhost:3333/project/projects", {
           method: "POST",
           body: JSON.stringify({ userid: user.id }),
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken} ` || "",
+          },
         });
 
         if (!res.ok) {

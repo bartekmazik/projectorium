@@ -9,23 +9,28 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CircleUserRound } from "lucide-react";
+import { CircleUserRound, SquareArrowOutUpRight } from "lucide-react";
 import { UserPlus } from "lucide-react";
+import { useParams } from "next/navigation";
 
-const Member = (props: { username: string }) => {
+const Member = ({ username }: any) => {
   return (
     <>
       <div className="flex flex-row items-center justify-between  py-1 ">
         <div className="flex flex-row items-center">
           <CircleUserRound className="w-8 h-8 mr-2" />
-          {props.username}
+          {username.email}
         </div>
       </div>
     </>
   );
 };
 
-const TeamCard = ({ users }: any) => {
+interface TeamCardProps {
+  users: any;
+}
+
+const TeamCard = ({ users }: TeamCardProps) => {
   return (
     <>
       <Card className=" w-64 m-2 flex flex-col justify-between">
@@ -35,8 +40,8 @@ const TeamCard = ({ users }: any) => {
             <Button variant="ghost">Edit</Button>
           </CardHeader>
           <CardContent>
-            {users.map((username, i) => {
-              return <Member username={username} key={i} />;
+            {users.map((username) => {
+              return <Member username={username} key={username.id} />;
             })}
           </CardContent>
         </div>

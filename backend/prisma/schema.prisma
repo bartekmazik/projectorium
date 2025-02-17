@@ -23,10 +23,11 @@ model User {
 
   firstName String?
   lastName  String?
-  projects ProjectUser[]
+  projects  ProjectUser[]
+
+  tasks TaskUser[]
 
   @@map("users")
-  
 }
 
 model Project {
@@ -34,17 +35,17 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name       String
+  name        String
   description String?
-  projectCode String @unique
+  projectCode String  @unique
 
   users ProjectUser[]
 
-  // userId Int
-  // user   User @relation(fields: [userId], references: [id])
+  tasks Task[]
 
   @@map("projects")
 }
+
 model ProjectUser {
   userId    Int
   projectId Int
@@ -52,6 +53,29 @@ model ProjectUser {
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  @@id([userId, projectId]) 
-  @@map("project_users") 
+  @@id([userId, projectId])
+  @@map("project_users")
+}
+
+model Task {
+  id         Int        @id @default(autoincrement())
+  title      String
+  description String
+  status     String     @default("TODO")
+  projectId  Int
+  project    Project    @relation(fields: [projectId], references: [id])
+  assignedTo TaskUser[]
+
+  @@map("tasks")
+}
+
+model TaskUser {
+  userId Int
+  taskId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@id([userId, taskId])
+  @@map("task_users")
 }

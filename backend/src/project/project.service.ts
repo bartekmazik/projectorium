@@ -76,6 +76,7 @@ export class ProjectService {
       select: {
         user: {
           select: {
+            id: true,
             email: true,
           },
         },
@@ -83,7 +84,10 @@ export class ProjectService {
     });
     return {
       project: project,
-      members: team.map((teamMember) => teamMember.user.email),
+      members: team.map((teamMember) => ({
+        email: teamMember.user.email,
+        id: teamMember.user.id,
+      })),
     };
   }
 }

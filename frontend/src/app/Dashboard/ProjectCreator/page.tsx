@@ -59,7 +59,7 @@ const mySchema = z.object({
 });
 export default function Login() {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, accessToken } = useUser();
 
   const form = useForm({
     resolver: zodResolver(mySchema),
@@ -88,6 +88,7 @@ export default function Login() {
       body: JSON.stringify(prop),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken} ` || "",
       },
     });
     const json = res.json();
