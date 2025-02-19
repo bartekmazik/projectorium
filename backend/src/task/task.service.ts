@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { TaskDto } from './dto';
+import { ChangeStatusDto, TaskDto } from './dto';
 
 @Injectable()
 export class TaskService {
   constructor(private prisma: PrismaService) {}
   async createTask(dto: TaskDto) {
-    const { title, status, description, projectId, assignedToIds } = dto;
+    const { title, description, points, projectId, assignedToIds } = dto;
 
     const task = await this.prisma.task.create({
       data: {
         title,
-        status,
         projectId,
         description,
+        points,
         assignedTo: {
           create: assignedToIds.map((userId) => ({
             user: { connect: { id: userId } },
@@ -44,14 +44,39 @@ export class TaskService {
       },
       include: {
         assignedTo: {
-          include: {
-            user: true,
+          select: {
+            user: {
+              select: {
+                email: true,
+              },
+            },
           },
         },
-        project: true,
+        project: {
+          include: {
+            users: {
+              where: {
+                userId: userId,
+              },
+              select: {
+                role: true,
+              },
+            },
+          },
+        },
       },
     });
 
     return { message: 'Tasks retrieved', tasks };
+  }
+  async changeTaskStatus(dto: ChangeStatusDto) {
+    await this.prisma.task.update({
+      where: {
+        id: dto.taskid,
+      },
+      data: {
+        status: dto.status,
+      },
+    });
   }
 }

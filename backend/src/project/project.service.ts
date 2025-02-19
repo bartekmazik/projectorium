@@ -4,6 +4,7 @@ import { ProjectDto } from './dto';
 import { JoinProjectDto } from './dto/joinproject.dto';
 import { GetProjectDto } from './dto/getproject.dto';
 import { GetProjectIdDto } from './dto/getprojectid.dto';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class ProjectService {
@@ -15,7 +16,7 @@ export class ProjectService {
         description: dto.description,
         projectCode: String(Math.random()).slice(2, 8),
         users: {
-          create: [{ userId: dto.userId }],
+          create: [{ userId: dto.userId, role: Role.ADMIN }],
         },
       },
     });

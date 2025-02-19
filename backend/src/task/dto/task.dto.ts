@@ -1,3 +1,4 @@
+import { TaskStatus } from '@prisma/client';
 import { IsNotEmpty } from 'class-validator';
 
 export class TaskDto {
@@ -8,14 +9,15 @@ export class TaskDto {
   @IsNotEmpty()
   description: string;
   @IsNotEmpty()
+  points: number;
+  @IsNotEmpty()
   projectId: number;
   @IsNotEmpty()
   assignedToIds: Array<number>;
 }
-
-export class GetTaskDto {
+export class ChangeStatusDto {
   @IsNotEmpty()
-  projectId: number;
+  taskid: number;
   @IsNotEmpty()
-  userId: number;
+  status: TaskStatus;
 }

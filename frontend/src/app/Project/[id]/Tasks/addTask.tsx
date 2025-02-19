@@ -28,6 +28,7 @@ import { z } from "zod";
 const taskSchema = z.object({
   title: z.string().min(1, "Task title is required"),
   description: z.string().min(1, "Task description is required"),
+  points: z.string(),
   assignedToIds: z
     .array(z.number())
     .nonempty("At least one user must be selected"),
@@ -42,12 +43,14 @@ const AddTask = () => {
   const form = useForm<{
     title: string;
     description: string;
+    points: string;
     assignedToIds: number[];
   }>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
       title: "",
       description: "",
+      points: "0",
       assignedToIds: [],
     },
   });
@@ -92,12 +95,14 @@ const AddTask = () => {
   const onSubmit = async (data: {
     title: string;
     description: string;
+    points: string;
     assignedToIds: number[];
   }) => {
     try {
       const taskObject = {
         title: data.title,
         description: data.description,
+        points: parseInt(data.points),
         status: "TODO",
         projectId: Number(id),
         assignedToIds: data.assignedToIds,
@@ -157,6 +162,25 @@ const AddTask = () => {
                       <FormLabel>Task Description</FormLabel>
                       <FormControl>
                         <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="points"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Points</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          inputMode="numeric"
+                          min={1}
+                          max={2}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -13,7 +13,7 @@ import { CircleUserRound, SquareArrowOutUpRight } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useUser } from "@/lib/AuthProvider";
 
-const Task = ({ title }: { title: string }) => {
+const Task = ({ title, points }: { title: string; points: number }) => {
   return (
     <>
       <Button
@@ -23,7 +23,7 @@ const Task = ({ title }: { title: string }) => {
         <div className="flex flex-col items-start">
           <p>{title}</p>
 
-          <CardDescription>Status: aktywny</CardDescription>
+          <CardDescription>Points: {points}</CardDescription>
         </div>
         <div>Go to task</div>
       </Button>
@@ -71,7 +71,9 @@ const TasksCard = ({ id }: { id: string }) => {
         <CardContent className="p-1">
           <ul className="flex flex-col border-b">
             {tasks ? (
-              tasks.map((task) => <Task title={task.title} key={task.id} />)
+              tasks.map((task) => (
+                <Task title={task.title} points={task.points} key={task.id} />
+              ))
             ) : (
               <div>Not found tasks</div>
             )}

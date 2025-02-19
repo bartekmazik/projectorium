@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { TaskDto } from './dto';
+import { ChangeStatusDto, TaskDto } from './dto';
 import { TaskService } from './task.service';
 import { JwtGuard } from 'src/auth/guard';
 import { GetUser } from 'src/auth/decorator';
@@ -21,6 +21,10 @@ export class TaskController {
   @Post('create')
   createTask(@Body() dto: TaskDto) {
     return this.taskService.createTask(dto);
+  }
+  @Post(':id/changestatus')
+  changeTaskStatus(@Body() dto: ChangeStatusDto) {
+    return this.taskService.changeTaskStatus(dto);
   }
   @Get('get/:id')
   getTask(@GetUser() user: User, @Param('id', new ParseIntPipe()) id: number) {

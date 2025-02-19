@@ -9,6 +9,7 @@ import NotesCard from "@/components/project/elements/notesCard";
 import FinancesCard from "@/components/project/elements/financesCard";
 import { useParams } from "next/navigation";
 import { useUser } from "@/lib/AuthProvider";
+import RankingCard from "@/components/project/elements/rankingCard";
 
 const Page = () => {
   const { id } = useParams();
@@ -48,6 +49,7 @@ const Page = () => {
       <div className="flex flex-row flex-wrap p-5 overflow-visible gap-3">
         <TeamCard users={project?.members || []} />
         <TasksCard id={id as string} />
+        <RankingCard />
         {/* <CalendarCard />
         <LinksCard />
         <NotesCard />
