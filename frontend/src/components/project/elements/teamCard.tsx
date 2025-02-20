@@ -47,6 +47,7 @@ interface TeamCardProps {
 
 const TeamCard = ({ users, code }: TeamCardProps) => {
   const [open, setOpen] = useState(false);
+
   return (
     <>
       <Card className=" w-64 m-2 flex flex-col justify-between">
@@ -72,7 +73,9 @@ const TeamCard = ({ users, code }: TeamCardProps) => {
                   Share this code with people you want to join your project
                 </DialogTitle>
               </DialogHeader>
-              <DialogDescription>Code: {code}</DialogDescription>
+              <div className="flex flex-row items-center justify-start gap-2">
+                Code: <p className="font-bold">{code}</p>
+              </div>
             </DialogContent>
           </Dialog>
         </CardFooter>

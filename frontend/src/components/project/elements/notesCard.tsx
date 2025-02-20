@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CircleUserRound } from "lucide-react";
 import { Pencil } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 const Note = () => {
   return (
     <>
@@ -21,9 +22,6 @@ const Note = () => {
         <div className="flex flex-col items-start">
           <p>Przeniesc cegly na dach</p>
           <CardDescription>Status: aktywny</CardDescription>
-        </div>
-        <div>
-          <Button variant="ghost">Edit</Button>
         </div>
       </Button>
     </>

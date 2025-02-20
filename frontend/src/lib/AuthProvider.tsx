@@ -73,7 +73,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         if (!res.ok) throw new Error("Failed to fetch user");
 
         const json = await res.json();
-        console.log(json);
+
         setUser(json);
       } catch (error) {
         console.error("Error fetching user:", error);
