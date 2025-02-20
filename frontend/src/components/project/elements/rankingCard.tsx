@@ -21,7 +21,7 @@ const RankingUser = ({ user, points }: { user: any; points: number }) => {
         variant="ghost"
         className="flex flex-row justify-between border-t rounded-none py-7"
       >
-        <p>{user.email}</p>
+        <p>{`${user.firstName} ${user.lastName.split("")[0]}`}</p>
         <div>Points: {points}</div>
       </Button>
     </>
@@ -57,7 +57,7 @@ const RankingCard = () => {
           </CardHeader>
           <CardContent className="p-1">
             <ul className="flex flex-col border-b">
-              {ranking ? (
+              {ranking && ranking.length > 0 ? (
                 ranking.map((rankingUser: any, i: number) => (
                   <RankingUser
                     user={rankingUser.user}
@@ -66,7 +66,7 @@ const RankingCard = () => {
                   />
                 ))
               ) : (
-                <div>Nie ma rankingu</div>
+                <div>Brak rankingu</div>
               )}
             </ul>
           </CardContent>

@@ -63,19 +63,21 @@ const TasksCard = ({ id }: { id: string }) => {
     <>
       <Card className=" w-96 m-2">
         <CardHeader className="flex flex-row justify-between items-center">
-          <CardTitle>Tasks</CardTitle>
+          <CardTitle>Tasks 📝</CardTitle>
           <Link href={`/Project/${id}/Tasks`}>
             <SquareArrowOutUpRight className="w-6 h-6" />
           </Link>
         </CardHeader>
         <CardContent className="p-1">
-          <ul className="flex flex-col border-b">
-            {tasks ? (
+          <ul className="flex flex-col ">
+            {tasks && tasks.length > 0 ? (
               tasks.map((task) => (
                 <Task title={task.title} points={task.points} key={task.id} />
               ))
             ) : (
-              <div>Not found tasks</div>
+              <div className="flex justify-center items-center">
+                Any tasks yet
+              </div>
             )}
           </ul>
         </CardContent>

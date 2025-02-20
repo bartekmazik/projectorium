@@ -32,6 +32,7 @@ const Page = () => {
         if (!res.ok) throw new Error("Failed to fetch project");
 
         const json = await res.json();
+        console.log(json.members);
         setProject(json);
       } catch (error) {
         console.error("Error fetching project:", error);
@@ -47,7 +48,7 @@ const Page = () => {
         {project?.project.name || "Loading..."}
       </div>
       <div className="flex flex-row flex-wrap p-5 overflow-visible gap-3">
-        <TeamCard users={project?.members || []} />
+        <TeamCard users={project?.members || []} code={project?.code} />
         <TasksCard id={id as string} />
         <RankingCard />
         {/* <CalendarCard />

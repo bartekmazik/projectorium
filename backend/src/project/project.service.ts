@@ -75,10 +75,13 @@ export class ProjectService {
         projectId: dto.id,
       },
       select: {
+        role: true,
         user: {
           select: {
             id: true,
             email: true,
+            firstName: true,
+            lastName: true,
           },
         },
       },
@@ -87,6 +90,9 @@ export class ProjectService {
       project: project,
       members: team.map((teamMember) => ({
         email: teamMember.user.email,
+        firstName: teamMember.user.firstName,
+        lastName: teamMember.user.lastName,
+        role: teamMember.role,
         id: teamMember.user.id,
       })),
     };

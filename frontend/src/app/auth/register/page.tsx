@@ -35,7 +35,8 @@ import { useRouter } from "next/navigation";
 import { error } from "console";
 const mySchema = z
   .object({
-    nickname: z.string().min(3),
+    firstName: z.string(),
+    lastName: z.string(),
     email: z.coerce.string().email().min(5),
     password: z.string().min(8, "Zbyt krótkie!"),
     passwordRepeat: z.string().min(8),
@@ -59,12 +60,18 @@ export default function Login() {
       email: "",
       password: "",
       passwordRepeat: "",
-      nickname: "",
+      firstName: "",
+      lastName: "",
     },
   });
 
   const onSubmit = async (prop: any) => {
-    const object = { email: prop.email, password: prop.password };
+    const object = {
+      email: prop.email,
+      password: prop.password,
+      firstName: prop.firstName,
+      lastName: prop.lastName,
+    };
     const res = await fetch("http://localhost:3333/auth/signup", {
       method: "POST",
       body: JSON.stringify(object),
@@ -73,10 +80,8 @@ export default function Login() {
       },
     });
 
-    const json = await res.json();
-
     //authContext.setAuthToken(json.data.jwtToken);
-    toast.success("Zalogowano", {
+    toast.success("Zarenestrowano", {
       className:
         "!border-green-200 !bg-gradient-to-t !from-[#00ff0006] !to-[#00ff0002]",
       duration: 7 * 1000,
@@ -105,10 +110,23 @@ export default function Login() {
               <div className="flex flex-col gap-4">
                 <FormField
                   control={form.control}
-                  name="nickname"
+                  name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nickname</FormLabel>
+                      <FormLabel>First name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last name</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>

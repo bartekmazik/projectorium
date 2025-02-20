@@ -28,7 +28,7 @@ const mySchema = z.object({
 });
 
 const JoinProject = () => {
-  const { user } = useUser();
+  const { user, accessToken } = useUser();
   const [open, setOpen] = useState(false);
 
   const form = useForm({
@@ -44,7 +44,10 @@ const JoinProject = () => {
       const res = await fetch("http://localhost:3333/project/join", {
         method: "POST",
         body: JSON.stringify(object),
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
 
       if (!res.ok) {
@@ -68,14 +71,17 @@ const JoinProject = () => {
           <DialogTitle>Enter project code</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
             <div className="flex flex-col gap-4">
               <FormField
                 control={form.control}
                 name="code"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Project Code</FormLabel>
+                    <FormLabel>Code</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -85,7 +91,7 @@ const JoinProject = () => {
               />
             </div>
             <DialogFooter>
-              <Button type="submit">Join</Button>
+              <Button type="submit">Join project</Button>
             </DialogFooter>
           </form>
         </Form>

@@ -2,19 +2,21 @@
 
 import { useUser } from "@/lib/AuthProvider";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import AddTask from "./addTask";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { MoreHorizontal } from "lucide-react";
+import { ArrowLeft, Trash2 } from "lucide-react";
+import Link from "next/link";
 
 enum TaskStatus {
   TODO,
   SUBMITED,
   COMPLETED,
+  DELETED,
 }
 
 interface TaskMember {
@@ -41,6 +43,7 @@ function Task({ task }: { task: Task }) {
   const { id } = useParams();
   const { accessToken } = useUser();
   const [taskStatus, setTaskStatus] = useState<string>(task.status);
+  const router = useRouter();
   const getStatusColor = (status: string) => {
     switch (status) {
       case "TODO":
@@ -56,7 +59,7 @@ function Task({ task }: { task: Task }) {
   const handleTask = async (newStatus: string) => {
     try {
       const object = { status: newStatus, taskid: task.id };
-      console.log(newStatus);
+
       const res = await fetch(`http://localhost:3333/task/${id}/changestatus`, {
         method: "POST",
         body: JSON.stringify(object),
@@ -70,6 +73,7 @@ function Task({ task }: { task: Task }) {
         throw new Error("Failed to change task status");
       }
       setTaskStatus(newStatus);
+      router.refresh();
     } catch (error) {
       console.error("Error joining project:", error);
     }
@@ -96,7 +100,21 @@ function Task({ task }: { task: Task }) {
         }
       }
       case "COMPLETED": {
-        return <Badge variant={"secondary"}>Completed</Badge>;
+        switch (task.project.users[0].role) {
+          case "ADMIN": {
+            return (
+              <Button
+                variant={"destructive"}
+                onClick={() => handleTask("DELETED")}
+              >
+                <Trash2 />
+              </Button>
+            );
+          }
+          case "MEMBER": {
+            return <Badge variant={"secondary"}>Completed</Badge>;
+          }
+        }
       }
     }
   }
@@ -150,7 +168,6 @@ const page = () => {
 
   const { id } = useParams();
   const accessToken = useUser().accessToken;
-  const userid = useUser().user?.id;
 
   useEffect(() => {
     if (!id) return;
@@ -168,7 +185,7 @@ const page = () => {
         if (!res.ok) throw new Error("Failed to fetch project");
 
         const json = await res.json();
-        console.log(json.tasks);
+
         setTasks(json.tasks);
       } catch (error) {
         console.error("Error fetching project:", error);
@@ -181,11 +198,22 @@ const page = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center font-bold text-3xl">
-        Tasks
+        <div className="flex flex-row justify-center items-center gap-2">
+          <Link href={`/Project/${id}`}>
+            <Button variant={"ghost"}>
+              <ArrowLeft />
+            </Button>
+          </Link>
+          Tasks 📝{" "}
+        </div>
         <AddTask />
       </div>
       <div className="pt-8">
-        {tasks && tasks.map((task, i) => <Task task={task} key={i} />)}
+        {tasks && tasks.length > 0 ? (
+          tasks.map((task, i) => <Task task={task} key={i} />)
+        ) : (
+          <div>No tasks yet </div>
+        )}
       </div>
     </div>
   );

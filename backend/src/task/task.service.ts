@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChangeStatusDto, TaskDto } from './dto';
+import { TaskStatus } from '@prisma/client';
 
 @Injectable()
 export class TaskService {
@@ -71,12 +72,46 @@ export class TaskService {
   }
   async changeTaskStatus(dto: ChangeStatusDto) {
     await this.prisma.task.update({
-      where: {
-        id: dto.taskid,
-      },
-      data: {
-        status: dto.status,
-      },
+      where: { id: dto.taskid },
+      data: { status: dto.status },
     });
+
+    if (dto.status === TaskStatus.COMPLETED) {
+      const task = await this.prisma.task.findUnique({
+        where: { id: dto.taskid },
+        include: {
+          assignedTo: {
+            select: { userId: true },
+          },
+          project: {
+            select: { id: true },
+          },
+        },
+      });
+
+      if (!task) {
+        throw new Error('Task not found');
+      }
+
+      const { assignedTo, project } = task;
+      const taskPoints = task.points;
+
+      await this.prisma.projectUser.updateMany({
+        where: {
+          userId: { in: assignedTo.map((user) => user.userId) },
+          projectId: project.id,
+        },
+        data: {
+          pointsCount: { increment: taskPoints },
+        },
+      });
+    }
+    if (dto.status === TaskStatus.DELETED) {
+      await this.prisma.task.delete({
+        where: {
+          id: dto.taskid,
+        },
+      });
+    }
   }
 }

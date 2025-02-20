@@ -21,8 +21,8 @@ model User {
   email String @unique
   hash  String
 
-  firstName String?
-  lastName  String?
+  firstName String
+  lastName  String
   projects  ProjectUser[]
 
   tasks TaskUser[]
@@ -92,4 +92,5 @@ enum TaskStatus {
   TODO
   SUBMITED
   COMPLETED
+  DELETED
 }

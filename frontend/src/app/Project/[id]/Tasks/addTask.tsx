@@ -134,7 +134,7 @@ const AddTask = () => {
         <DialogTrigger asChild>
           <Button>Add Task</Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] z-[100000]">
           <DialogHeader>
             <DialogTitle>Create a Task</DialogTitle>
           </DialogHeader>

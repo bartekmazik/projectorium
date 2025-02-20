@@ -25,7 +25,8 @@ export class ComponentsService {
       select: {
         user: {
           select: {
-            email: true,
+            firstName: true,
+            lastName: true,
           },
         },
         pointsCount: true,
