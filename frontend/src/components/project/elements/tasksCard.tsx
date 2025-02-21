@@ -18,7 +18,7 @@ const Task = ({ title, points }: { title: string; points: number }) => {
     <>
       <Button
         variant="ghost"
-        className="flex flex-row justify-between border-t rounded-none py-7"
+        className="flex flex-row justify-between border-t rounded-none py-7 border-b"
       >
         <div className="flex flex-col items-start">
           <p>{title}</p>

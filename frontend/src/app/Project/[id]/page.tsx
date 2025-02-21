@@ -10,6 +10,8 @@ import FinancesCard from "@/components/project/elements/financesCard";
 import { useParams } from "next/navigation";
 import { useUser } from "@/lib/AuthProvider";
 import RankingCard from "@/components/project/elements/rankingCard";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 const Page = () => {
   const { id } = useParams();
@@ -42,7 +44,10 @@ const Page = () => {
 
   return (
     <>
-      <div className="p-5 text-3xl font-bold">
+      <div className="p-5 text-3xl font-bold flex flex-row items-center justify-start gap-2">
+        <Link href="/Dashboard">
+          <ArrowLeft />
+        </Link>
         {project?.project.name || "Loading..."}
       </div>
       <div className="flex flex-row flex-wrap p-5 overflow-visible gap-3">

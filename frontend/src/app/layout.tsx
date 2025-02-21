@@ -8,6 +8,7 @@ import Sidebar from "@/components/sidebar";
 
 import "@/styles/globals.css";
 import { UserProvider } from "@/lib/AuthProvider";
+import { Toaster } from "sonner";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -22,6 +23,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <body className={`${isDark === true ? "dark" : ""}`}>
         <main className="flex flex-col w-full">
           <UserProvider>
+            <Toaster />
             <Navbar setIsDark={setIsDark} isDark={isDark} />
             <div className="flex flex-row">
               <Sidebar />

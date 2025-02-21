@@ -13,6 +13,7 @@ import { CircleUserRound } from "lucide-react";
 import { Pencil } from "lucide-react";
 import { useUser } from "@/lib/AuthProvider";
 import { useParams } from "next/navigation";
+import { Label } from "@/components/ui/label";
 
 const RankingUser = ({ user, points }: { user: any; points: number }) => {
   return (
@@ -21,7 +22,7 @@ const RankingUser = ({ user, points }: { user: any; points: number }) => {
         variant="ghost"
         className="flex flex-row justify-between border-t rounded-none py-7"
       >
-        <p>{`${user.firstName} ${user.lastName.split("")[0]}`}</p>
+        <p>{`${user.firstName} ${user.lastName.split("")[0]}.`}</p>
         <div>Points: {points}</div>
       </Button>
     </>
@@ -42,7 +43,7 @@ const RankingCard = () => {
         },
       });
       const json = await res.json();
-      console.log(json);
+
       setRanking(json);
     };
 
@@ -71,8 +72,8 @@ const RankingCard = () => {
             </ul>
           </CardContent>
         </div>
-        <CardFooter className="w-full flex flex-row justify-end">
-          <Button variant="ghost">See all </Button>
+        <CardFooter className="w-full flex flex-row justify-center">
+          <Label>Complete tasks to get more points! 🎯</Label>
         </CardFooter>
       </Card>
     </>

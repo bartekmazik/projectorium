@@ -24,7 +24,14 @@ export class TaskService {
       include: {
         assignedTo: {
           include: {
-            user: true,
+            user: {
+              select: {
+                email: true,
+                firstName: true,
+                lastName: true,
+                id: true,
+              },
+            },
           },
         },
       },
@@ -48,7 +55,8 @@ export class TaskService {
           select: {
             user: {
               select: {
-                email: true,
+                firstName: true,
+                lastName: true,
               },
             },
           },

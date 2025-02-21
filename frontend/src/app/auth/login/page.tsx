@@ -30,8 +30,6 @@ import {
   FormMessage /*FormRootError*/,
 } from "@/components/ui/form";
 
-//import { toast } from "sonner";
-
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/lib/AuthProvider";
@@ -70,7 +68,7 @@ export default function Login() {
     toast.success("Zalogowano", {
       className:
         "!border-green-200 !bg-gradient-to-t !from-[#00ff0006] !to-[#00ff0002]",
-      duration: 7 * 1000,
+      duration: 5 * 1000,
     });
     router.push("/");
   };

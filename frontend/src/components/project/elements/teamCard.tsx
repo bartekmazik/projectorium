@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
   CircleUserRound,
+  Copy,
   Crown,
   CrownIcon,
   SquareArrowOutUpRight,
@@ -25,15 +26,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 const Member = ({ user }: any) => {
   return (
     <>
       <div className="flex flex-row items-center justify-between  py-1 ">
-        <div className="flex flex-row items-center gap-2 ">
+        <div className="flex flex-row items-center gap-1 ">
           <CircleUserRound className="w-8 h-8 " />
-          {`${user.firstName} ${user.lastName}`}
-          {user.role === "ADMIN" ? <CrownIcon width={16} height={16} /> : <></>}
+          <Label>{`${user.firstName} ${user.lastName}`}</Label>
+          {user.role === "ADMIN" ? <Label>(Admin)</Label> : <></>}
         </div>
       </div>
     </>
@@ -47,13 +49,16 @@ interface TeamCardProps {
 
 const TeamCard = ({ users, code }: TeamCardProps) => {
   const [open, setOpen] = useState(false);
+  const copycode = (e: any) => {
+    navigator.clipboard.writeText(code);
+  };
 
   return (
     <>
       <Card className=" w-64 m-2 flex flex-col justify-between">
         <div>
           <CardHeader className="flex flex-row justify-between">
-            <CardTitle>Team Members 🙎</CardTitle>
+            <CardTitle>Team 🙎</CardTitle>
             <Button variant="ghost">Edit</Button>
           </CardHeader>
           <CardContent>
@@ -74,7 +79,13 @@ const TeamCard = ({ users, code }: TeamCardProps) => {
                 </DialogTitle>
               </DialogHeader>
               <div className="flex flex-row items-center justify-start gap-2">
-                Code: <p className="font-bold">{code}</p>
+                Code: <p className="font-semibold">{code}</p>
+                <Button
+                  variant={"ghost"}
+                  className="flex justify-center items-center"
+                >
+                  <Copy onClick={copycode} width={16} />
+                </Button>
               </div>
             </DialogContent>
           </Dialog>

@@ -11,6 +11,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Trash2 } from "lucide-react";
 import Link from "next/link";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Label } from "@/components/ui/label";
 
 enum TaskStatus {
   TODO,
@@ -21,7 +28,8 @@ enum TaskStatus {
 
 interface TaskMember {
   user: {
-    email: string;
+    firstName: string;
+    lastName: string;
   };
 }
 interface TaskRole {
@@ -132,19 +140,24 @@ function Task({ task }: { task: Task }) {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-4">
-            <div className="flex -space-x-2">
+            <div className="flex -space-x-2 ">
               {task.assignedTo.map((member, index) => (
-                <Avatar
-                  key={index}
-                  className="border-2 border-background h-8 w-8"
-                >
-                  <AvatarFallback>
-                    {member.user.email
-                      .split(" ")
-                      .map((n: string) => n[0])
-                      .join("")}
-                  </AvatarFallback>
-                </Avatar>
+                <TooltipProvider key={index}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Avatar className="border-2 border-background h-8 w-8">
+                        <AvatarFallback>
+                          {member.user.firstName[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <Label>
+                        {member.user.firstName} {member.user.lastName}
+                      </Label>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               ))}
             </div>
             <Badge
