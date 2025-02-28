@@ -59,7 +59,6 @@ const TeamCard = ({ users, code }: TeamCardProps) => {
         <div>
           <CardHeader className="flex flex-row justify-between">
             <CardTitle>Team 🙎</CardTitle>
-            <Button variant="ghost">Edit</Button>
           </CardHeader>
           <CardContent>
             {users.map((user) => {

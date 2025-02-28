@@ -37,4 +37,19 @@ export class ComponentsController {
   getNotes(@GetUser() user: User, @Param('id', new ParseIntPipe()) id: number) {
     return this.ComponentsService.getNotes(user.id, id);
   }
+  @Post('/:id/chat')
+  sendMessage(
+    @GetUser() user: User,
+    @Body() question: string,
+    @Param('id', new ParseIntPipe()) id: number,
+  ) {
+    return this.ComponentsService.sendMessage(user.id, question, id);
+  }
+  @Get('/:id/chat')
+  getMessages(
+    @GetUser() user: User,
+    @Param('id', new ParseIntPipe()) id: number,
+  ) {
+    return this.ComponentsService.getMessages(user.id, id);
+  }
 }

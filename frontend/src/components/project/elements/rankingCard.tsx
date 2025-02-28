@@ -72,7 +72,7 @@ const RankingCard = () => {
             </ul>
           </CardContent>
         </div>
-        <CardFooter className="w-full flex flex-row justify-center">
+        <CardFooter className="w-full flex flex-row justify-center my-4">
           <Label>Complete tasks to get more points! 🎯</Label>
         </CardFooter>
       </Card>

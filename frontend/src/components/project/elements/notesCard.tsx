@@ -88,7 +88,7 @@ const NotesCard = () => {
           <CardContent className="p-1">
             <ul className="flex flex-col border-b">
               {notes && notes.length > 0 ? (
-                notes.map((note: Note) => <Note note={note} />)
+                notes.map((note: Note, i) => <Note note={note} key={i} />)
               ) : (
                 <div>No notes</div>
               )}

@@ -25,8 +25,10 @@ model User {
   lastName  String
   projects  ProjectUser[]
 
-  tasks TaskUser[]
-  notes Note[]
+  tasks   TaskUser[]
+  notes   Note[]
+  Chat    Chat[]
+  Message Message[]
 
   @@map("users")
 }
@@ -44,6 +46,7 @@ model Project {
 
   tasks Task[]
   notes Note[]
+  Chat  Chat[]
 
   @@map("projects")
 }
@@ -98,9 +101,44 @@ model Note {
   @@map("notes")
 }
 
+model Chat {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    Int
+  projectId Int
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project  Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  messages Message[]
+
+  @@map("chats")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  chatId  Int
+  userId  Int?
+  role    ChatRole
+  content String
+
+  chat Chat  @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+}
+
 enum Role {
   ADMIN
   MEMBER
+}
+
+enum ChatRole {
+  MENTOR
+  USER
 }
 
 enum TaskStatus {

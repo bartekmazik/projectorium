@@ -12,6 +12,8 @@ import { useUser } from "@/lib/AuthProvider";
 import RankingCard from "@/components/project/elements/rankingCard";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import MentorCard from "@/components/project/elements/mentorCard";
+import ProfileCard from "@/components/project/elements/profileCard";
 
 const Page = () => {
   const { id } = useParams();
@@ -58,6 +60,8 @@ const Page = () => {
         <TasksCard id={id as string} />
         <RankingCard />
         <NotesCard />
+        <MentorCard />
+        <ProfileCard />
         {/* <CalendarCard />
         <LinksCard />
         

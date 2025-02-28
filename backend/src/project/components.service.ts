@@ -2,9 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { addNoteDto } from './dto/note.dto';
 
+import { OpenAIService } from 'src/openai/openai.service';
+
 @Injectable()
 export class ComponentsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private openai: OpenAIService,
+  ) {}
   async getRanking(projectId: number, userId?: number) {
     const user = await this.prisma.project.findFirst({
       where: {
@@ -92,5 +97,161 @@ export class ComponentsService {
       },
     });
     return { notes };
+  }
+  async sendMessage(userId, question, projectId) {
+    const user = await this.prisma.project.findFirst({
+      where: {
+        id: projectId,
+        users: {
+          some: {
+            userId: userId,
+          },
+        },
+      },
+      include: {
+        users: {
+          include: {
+            user: {
+              select: {
+                firstName: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!user) {
+      return 'User not in project';
+    }
+    const project = await this.prisma.project.findFirst({
+      where: {
+        id: projectId,
+      },
+      select: {
+        name: true,
+        description: true,
+        _count: {
+          select: {
+            users: true,
+          },
+        },
+        tasks: true,
+      },
+    });
+    if (!project) {
+      return 'project does not exist';
+    }
+    const promptContent = `You are an AI Mentor in a gamified project management app. Your role is to guide teams toward productivity, motivation, and collaboration. Based on the provided project data, tasks, and team performance, give insightful and constructive feedback.
+When users ask for help, provide:
+
+A brief analysis of their current project status.
+
+Encouraging and actionable advice on how to improve efficiency, resolve blockers, or meet deadlines.
+
+If applicable, suggest relevant rewards, badges, or team challenges based on the gamification system to boost engagement.
+
+Try to keep the response in under 3-5 sentences.
+Keep the tone motivating, professional, yet friendly. Avoid generic answers—tailor responses to the user’s context.
+Here is the current project data: Project name: ${project.name} Project description: ${project.description} Team size: ${project._count.users} Project tasks: ${project.tasks.map(
+      (task) => {
+        return task.title;
+      },
+    )}
+    Here is the question you need to answer: ${question}`;
+    const message = await this.openai.chatCompletion({
+      prompt: promptContent,
+    });
+    if (!message) {
+      return 'Something went wrong ';
+    }
+    let chat = await this.prisma.chat.findFirst({
+      where: { projectId, userId },
+    });
+
+    if (!chat) {
+      chat = await this.prisma.chat.create({
+        data: {
+          projectId,
+          userId,
+        },
+      });
+    }
+
+    await this.prisma.message.create({
+      data: {
+        chatId: chat.id,
+        userId,
+        role: 'USER',
+        content: question.question,
+      },
+    });
+
+    await this.prisma.message.create({
+      data: {
+        chatId: chat.id,
+        role: 'MENTOR',
+        content: message.content,
+      },
+    });
+    return { message: 'Message sent' };
+  }
+  async getMessages(userId, projectId) {
+    const user = await this.prisma.project.findFirst({
+      where: {
+        id: projectId,
+        users: {
+          some: {
+            userId: userId,
+          },
+        },
+      },
+      include: {
+        users: {
+          include: {
+            user: {
+              select: {
+                firstName: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!user) {
+      return 'User not in project';
+    }
+    const project = await this.prisma.project.findFirst({
+      where: {
+        id: projectId,
+      },
+      select: {
+        name: true,
+        description: true,
+        _count: {
+          select: {
+            users: true,
+          },
+        },
+        tasks: true,
+      },
+    });
+    if (!project) {
+      return 'project does not exist';
+    }
+    const chat = await this.prisma.chat.findFirst({
+      where: {
+        projectId: projectId,
+        userId: userId,
+      },
+    });
+    if (!chat) {
+      return { message: 'Chat does not exist' };
+    }
+    const messages = await this.prisma.message.findMany({
+      where: {
+        chatId: chat.id,
+      },
+    });
+    return { chat: messages };
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   createContext,
   useContext,
@@ -38,6 +38,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : null
   );
   const router = useRouter();
+  const pathname = usePathname();
+  const publicRoutes = ["/", "/auth/login", "/auth/register"];
 
   const setAccessToken = (token: string | null) => {
     setAccessTokenState(token);
@@ -53,6 +55,11 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     router.push("/");
     setAccessToken(null);
   };
+  useEffect(() => {
+    if (accessToken === null && !publicRoutes.includes(pathname)) {
+      router.push("/");
+    }
+  }, [accessToken, pathname, router]);
 
   useEffect(() => {
     const fetchUser = async () => {

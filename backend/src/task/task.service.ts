@@ -75,8 +75,26 @@ export class TaskService {
         },
       },
     });
+    const completedTasks = await this.prisma.task.findMany({
+      where: {
+        projectId,
+        ...(userId && {
+          assignedTo: {
+            some: { userId },
+          },
+        }),
+        status: TaskStatus.COMPLETED,
+      },
+      select: {
+        id: true,
+      },
+    });
 
-    return { message: 'Tasks retrieved', tasks };
+    return {
+      message: 'Tasks retrieved',
+      tasks,
+      completedTasks: completedTasks.length,
+    };
   }
   async changeTaskStatus(dto: ChangeStatusDto) {
     await this.prisma.task.update({
