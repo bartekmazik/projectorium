@@ -53,6 +53,7 @@ const Page = () => {
         {project?.project.name || "Loading..."}
       </div>
       <div className="flex flex-row flex-wrap p-5 overflow-visible gap-3">
+        <ProfileCard />
         <TeamCard
           users={project?.members || []}
           code={project?.project.projectCode}
@@ -61,7 +62,7 @@ const Page = () => {
         <RankingCard />
         <NotesCard />
         <MentorCard />
-        <ProfileCard />
+
         {/* <CalendarCard />
         <LinksCard />
         

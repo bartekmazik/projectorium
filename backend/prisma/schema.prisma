@@ -18,6 +18,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  experience Int    @default(0)
+  
+  level      Int    @default(1)
+  league     League @default(BRONZE)
+
   email String @unique
   hash  String
 
@@ -146,4 +151,11 @@ enum TaskStatus {
   SUBMITED
   COMPLETED
   DELETED
+}
+
+enum League {
+  BRONZE
+  SILVER
+  GOLD
+  DIAMOND
 }

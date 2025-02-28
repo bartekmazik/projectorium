@@ -26,10 +26,9 @@ export default function Layout({ children }: { children: ReactNode }) {
             <Toaster />
             <Navbar setIsDark={setIsDark} isDark={isDark} />
             <div className="flex flex-row">
-              <Sidebar />
               <div
                 className={cn(
-                  "max-w-screen-2xl w-full md:ml-48 mt-16",
+                  "max-w-screen-2xl w-full mx-28  mt-16",
                   fontSans.variable
                 )}
               >

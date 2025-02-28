@@ -27,13 +27,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import UserAvatar from "@/components/UserAvatar";
 
 const Member = ({ user }: any) => {
   return (
     <>
       <div className="flex flex-row items-center justify-between  py-1 ">
         <div className="flex flex-row items-center gap-1 ">
-          <CircleUserRound className="w-8 h-8 " />
+          <UserAvatar
+            firstName={user.firstName}
+            lastName={user.lastName}
+            size="small"
+          />
           <Label>{`${user.firstName} ${user.lastName}`}</Label>
           {user.role === "ADMIN" ? <Label>(Admin)</Label> : <></>}
         </div>

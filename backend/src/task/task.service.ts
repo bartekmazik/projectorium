@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChangeStatusDto, TaskDto } from './dto';
 import { TaskStatus } from '@prisma/client';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class TaskService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private userLevel: UserService,
+  ) {}
   async createTask(dto: TaskDto) {
     const { title, description, points, projectId, assignedToIds } = dto;
 
@@ -130,6 +134,9 @@ export class TaskService {
         data: {
           pointsCount: { increment: taskPoints },
         },
+      });
+      task.assignedTo.map((user) => {
+        return this.userLevel.addExperience(user.userId, taskPoints);
       });
     }
     if (dto.status === TaskStatus.DELETED) {

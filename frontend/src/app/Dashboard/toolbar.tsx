@@ -102,7 +102,7 @@ const JoinProject = () => {
 
 const Toolbar = () => {
   return (
-    <div className="w-full h-16 dark:border-border border-b-primary-foreground border-b shadow-md">
+    <div className="w-full h-16 ">
       <div className="flex items-center justify-start gap-6 h-full px-6">
         <Link href="/Dashboard/ProjectCreator">
           <Button>Create new project</Button>
