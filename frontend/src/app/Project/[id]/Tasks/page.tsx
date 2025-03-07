@@ -18,6 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Label } from "@/components/ui/label";
+import Image from "next/image";
 
 enum TaskStatus {
   TODO,
@@ -41,6 +42,7 @@ interface TaskRole {
 export interface Task {
   id: number;
   title: string;
+  dueDate: Date;
   description: string;
   assignedTo: TaskMember[];
   project: TaskRole;
@@ -180,7 +182,8 @@ const page = () => {
   const [tasks, setTasks] = useState<Task[]>();
 
   const { id } = useParams();
-  const accessToken = useUser().accessToken;
+  const { accessToken } = useUser();
+
   const fetchData = async () => {
     const projectId = Number(id);
     try {
@@ -191,21 +194,22 @@ const page = () => {
         },
       });
 
-      if (!res.ok) throw new Error("Failed to fetch project");
+      if (!res.ok) throw new Error("Failed to fetch tasks");
 
       const json = await res.json();
 
       setTasks(json.tasks);
     } catch (error) {
-      console.error("Error fetching project:", error);
+      console.error("Error fetching tasks:", error);
     }
   };
   useEffect(() => {
+    if (!id || !accessToken) return; // Avoid unnecessary requests
     fetchData();
-  }, [id]);
+  }, [id, accessToken]); // Runs when `id` or `accessToken` changes
 
   return (
-    <div className="p-6">
+    <div className="p-6 ">
       <div className="flex justify-between items-center font-bold text-3xl">
         <div className="flex flex-row justify-center items-center gap-2">
           <Link href={`/Project/${id}`}>
@@ -215,13 +219,20 @@ const page = () => {
           </Link>
           Tasks 📝{" "}
         </div>
-        <AddTask refetch={fetchData()} />
+        <AddTask refetch={fetchData} />
       </div>
-      <div className="pt-8">
+      <div className="pt-8 w-full h-full">
         {tasks && tasks.length > 0 ? (
           tasks.reverse().map((task, i) => <Task task={task} key={i} />)
         ) : (
-          <div>No tasks yet </div>
+          <div className="pt-4 w-full flex flex-col justify-start items-center gap-4">
+            <Label className="font-semibold text-xl">
+              Such empty here! Add task or wait for your leader to add one!
+            </Label>
+            <div className="relative w-64 h-64">
+              <Image src="/notasks.svg" fill={true} alt="no tasks" />
+            </div>
+          </div>
         )}
       </div>
     </div>

@@ -7,6 +7,9 @@ export class TaskDto {
   @IsNotEmpty()
   status: string;
   @IsNotEmpty()
+  dueDate: Date;
+
+  @IsNotEmpty()
   description: string;
   @IsNotEmpty()
   points: number;

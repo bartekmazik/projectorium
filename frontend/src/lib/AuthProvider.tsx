@@ -59,10 +59,10 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     setAccessToken(null);
   };
   useEffect(() => {
-    if (!user && !publicRoutes.includes(pathname)) {
+    if (!loading && !user && !publicRoutes.includes(pathname)) {
       router.push("/");
     }
-  }, [accessToken, pathname, router]);
+  }, [loading, user, pathname, router]);
 
   useEffect(() => {
     const fetchUser = async () => {

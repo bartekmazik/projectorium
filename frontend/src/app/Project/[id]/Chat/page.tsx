@@ -33,9 +33,9 @@ const Message = React.forwardRef<
 >(({ role, content }, ref) => {
   function aligment() {
     if (role === "USER") {
-      return "justify-self-end";
+      return "justify-self-end bg-primary text-secondary";
     } else {
-      return "justify-self-start";
+      return "justify-self-start bg-secondary text-primary";
     }
   }
   aligment();

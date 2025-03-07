@@ -22,20 +22,16 @@ const ProjectCard = ({
 }) => {
   return (
     <>
-      <Card className="h-64 w-64 m-2">
-        <CardHeader>
-          <CardTitle>{name}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Status: active</p>
-        </CardContent>
-        <CardFooter>
-          <Link href={`/Project/${id}`}>
-            <Button variant="ghost">Go to project</Button>
-          </Link>
-        </CardFooter>
-      </Card>
+      <Link href={`/Project/${id}`} className="h-48 w-64">
+        <Card className="h-48 w-64 m-2 flex transition-colors hover:bg-accent hover:text-accent-foreground flex-col justify-between">
+          <CardHeader>
+            <CardTitle>{name}</CardTitle>
+            <CardDescription>{description}</CardDescription>
+          </CardHeader>
+
+          <CardFooter>ASAS</CardFooter>
+        </Card>
+      </Link>
     </>
   );
 };

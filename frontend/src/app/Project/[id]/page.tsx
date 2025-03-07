@@ -14,8 +14,10 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import MentorCard from "@/components/project/elements/mentorCard";
 import ProfileCard from "@/components/project/elements/profileCard";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const Page = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const { accessToken } = useUser();
   const [project, setProject] = useState(null);
@@ -24,6 +26,7 @@ const Page = () => {
     // if (!id) return;
 
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const res = await fetch(`http://localhost:3333/project/${id}`, {
           headers: {
@@ -36,6 +39,7 @@ const Page = () => {
         const json = await res.json();
 
         setProject(json);
+        setTimeout(() => setIsLoading(false), 1000);
       } catch (error) {
         console.error("Error fetching project:", error);
       }
@@ -44,13 +48,15 @@ const Page = () => {
     fetchData();
   }, [id]);
 
-  return (
+  return isLoading ? (
+    <LoadingSpinner />
+  ) : (
     <>
       <div className="p-5 text-3xl font-bold flex flex-row items-center justify-start gap-2">
         <Link href="/Dashboard">
           <ArrowLeft />
         </Link>
-        {project?.project.name || "Loading..."}
+        {project?.project.name}
       </div>
       <div className="flex flex-row flex-wrap p-5 overflow-visible gap-3">
         <ProfileCard />

@@ -20,7 +20,7 @@ const RankingUser = ({ user, points }: { user: any; points: number }) => {
     <>
       <Button
         variant="ghost"
-        className="flex flex-row justify-between border-t rounded-none py-7"
+        className="flex flex-row cursor-default justify-between border-t rounded-none py-7"
       >
         <p>{`${user.firstName} ${user.lastName.split("")[0]}.`}</p>
         <div>Points: {points}</div>

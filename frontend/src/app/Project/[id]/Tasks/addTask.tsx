@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -18,9 +19,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { useUser } from "@/lib/AuthProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "next/navigation";
+import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -29,6 +37,7 @@ const taskSchema = z.object({
   title: z.string().min(1, "Task title is required"),
   description: z.string().min(1, "Task description is required"),
   points: z.string(),
+  dueDate: z.date({ required_error: "Due date is required" }),
   assignedToIds: z
     .array(z.number())
     .nonempty("At least one user must be selected"),
@@ -44,12 +53,14 @@ const AddTask = ({ refetch }: { refetch: any }) => {
     title: string;
     description: string;
     points: string;
+    dueDate: Date;
     assignedToIds: number[];
   }>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
       title: "",
       description: "",
+      dueDate: new Date(),
       points: "0",
       assignedToIds: [],
     },
@@ -96,6 +107,7 @@ const AddTask = ({ refetch }: { refetch: any }) => {
     title: string;
     description: string;
     points: string;
+    dueDate: Date;
     assignedToIds: number[];
   }) => {
     try {
@@ -106,6 +118,7 @@ const AddTask = ({ refetch }: { refetch: any }) => {
         status: "TODO",
         projectId: Number(id),
         assignedToIds: data.assignedToIds,
+        dueDate: data.dueDate.toISOString(),
       };
 
       const res = await fetch("http://localhost:3333/task/create", {
@@ -136,9 +149,12 @@ const AddTask = ({ refetch }: { refetch: any }) => {
         <DialogTrigger asChild>
           <Button>Add Task</Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] z-[100000]">
+        <DialogContent className="sm:max-w-[425px] z-[10000]">
           <DialogHeader>
             <DialogTitle>Create a Task</DialogTitle>
+            <DialogDescription>
+              Give us simple information about task
+            </DialogDescription>
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -188,6 +204,41 @@ const AddTask = ({ refetch }: { refetch: any }) => {
                     </FormItem>
                   )}
                 />
+
+                {/* Calendar Component */}
+                <FormField
+                  control={form.control}
+                  name="dueDate"
+                  render={({ field }) => (
+                    <FormItem className="relative">
+                      <FormLabel>Due Date</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="outline">
+                            {field.value
+                              ? format(field.value, "PPP")
+                              : "Pick a date"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          className="w-auto p-0 z-[100001]"
+                          align="start"
+                          side="bottom"
+                        >
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={(date) =>
+                              date && setValue("dueDate", date)
+                            }
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <div>
                   <FormLabel>Assign to</FormLabel>
                   <div className="flex flex-col gap-2 mt-2">

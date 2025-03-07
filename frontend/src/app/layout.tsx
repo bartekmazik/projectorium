@@ -9,6 +9,7 @@ import Sidebar from "@/components/sidebar";
 import "@/styles/globals.css";
 import { UserProvider } from "@/lib/AuthProvider";
 import { Toaster } from "sonner";
+import Footer from "@/components/footer";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -35,7 +36,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 {children}
               </div>
             </div>
-            {/* <Footer /> */}
+            <Footer />
           </UserProvider>
         </main>
       </body>

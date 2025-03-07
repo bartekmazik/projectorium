@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import Link from "next/link";
 import { CircleUserRound, SquareArrowOutUpRight } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -116,7 +117,14 @@ const Notes = () => {
             return <Note key={note.id} note={note} />;
           })
         ) : (
-          <div>No notes yet</div>
+          <div className="pt-4 w-full flex flex-col justify-start items-center gap-4">
+            <Label className="font-semibold text-xl">
+              Such empty here! Try adding some notes!
+            </Label>
+            <div className="relative w-64 h-64">
+              <Image src="/nonotes.svg" fill={true} alt="no tasks" />
+            </div>
+          </div>
         )}
       </div>
     </div>

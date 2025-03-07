@@ -14,6 +14,7 @@ import { Pencil } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useParams } from "next/navigation";
 import { useUser } from "@/lib/AuthProvider";
+import { Label } from "@/components/ui/label";
 interface Note {
   id: number;
   createdAt: Date;
@@ -50,7 +51,7 @@ function Note({ note }: { note: Note }) {
 const NotesCard = () => {
   const { id } = useParams();
   const { accessToken } = useUser();
-  const [notes, setNotes] = useState<Note[]>();
+  const [notes, setNotes] = useState<Note[]>([]);
 
   useEffect(() => {
     if (!id) return;
@@ -86,11 +87,17 @@ const NotesCard = () => {
             </Link>
           </CardHeader>
           <CardContent className="p-1">
-            <ul className="flex flex-col border-b">
+            <ul
+              className={`flex flex-col h-full ${
+                notes?.length > 0 ? "border-b" : ""
+              }`}
+            >
               {notes && notes.length > 0 ? (
                 notes.map((note: Note, i) => <Note note={note} key={i} />)
               ) : (
-                <div>No notes</div>
+                <Label className="flex  justify-center items-center text-gray-500">
+                  No notes
+                </Label>
               )}
             </ul>
           </CardContent>

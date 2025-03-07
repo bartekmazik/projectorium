@@ -14,7 +14,22 @@ import { useParams } from "next/navigation";
 import { useUser } from "@/lib/AuthProvider";
 import { Label } from "@/components/ui/label";
 
-const Task = ({ title, points }: { title: string; points: number }) => {
+const Task = ({
+  title,
+  points,
+  date,
+}: {
+  title: string;
+  points: number;
+  date: Date;
+}) => {
+  const taskDate = new Date(date);
+  const today = new Date();
+
+  const timeLeft = Math.ceil(
+    (taskDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  console.log(timeLeft);
   return (
     <>
       <Button
@@ -24,7 +39,7 @@ const Task = ({ title, points }: { title: string; points: number }) => {
         <div className="flex flex-col items-start">
           <p>{title}</p>
 
-          <CardDescription>Due: </CardDescription>
+          <CardDescription>{timeLeft} days left</CardDescription>
         </div>
         <div>Points: {points}</div>
       </Button>
@@ -71,15 +86,20 @@ const TasksCard = ({ id }: { id: string }) => {
           </Link>
         </CardHeader>
         <CardContent className="p-1">
-          <ul className="flex flex-col border-b">
+          <ul className={`flex flex-col ${tasks.length > 0 ? "border-b" : ""}`}>
             {tasks && tasks.length > 0 ? (
               tasks.map((task) => (
-                <Task title={task.title} points={task.points} key={task.id} />
+                <Task
+                  title={task.title}
+                  points={task.points}
+                  date={task.dueDate}
+                  key={task.id}
+                />
               ))
             ) : (
-              <div className="flex justify-center items-center">
-                Any tasks yet
-              </div>
+              <Label className="flex justify-center items-center text-gray-500">
+                No active tasks
+              </Label>
             )}
           </ul>
         </CardContent>

@@ -11,12 +11,14 @@ export class TaskService {
     private userLevel: UserService,
   ) {}
   async createTask(dto: TaskDto) {
-    const { title, description, points, projectId, assignedToIds } = dto;
+    const { title, description, dueDate, points, projectId, assignedToIds } =
+      dto;
 
     const task = await this.prisma.task.create({
       data: {
         title,
         projectId,
+        dueDate,
         description,
         points,
         assignedTo: {
