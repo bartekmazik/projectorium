@@ -34,7 +34,7 @@ const taskSchema = z.object({
     .nonempty("At least one user must be selected"),
 });
 
-const AddTask = () => {
+const AddTask = ({ refetch }: { refetch: any }) => {
   const [users, setUsers] = useState([]);
   const { user, accessToken } = useUser();
   const [open, setOpen] = useState(false);
@@ -123,6 +123,8 @@ const AddTask = () => {
 
       form.reset();
       setOpen(false);
+      //refetch tasks
+      refetch();
     } catch (error) {
       console.error("Error creating task:", error);
     }

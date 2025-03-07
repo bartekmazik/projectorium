@@ -19,14 +19,14 @@ const Task = ({ title, points }: { title: string; points: number }) => {
     <>
       <Button
         variant="ghost"
-        className="flex flex-row justify-between  rounded-none py-7 border-t"
+        className="flex flex-row justify-between cursor-default  rounded-none py-7 border-t"
       >
         <div className="flex flex-col items-start">
           <p>{title}</p>
 
-          <CardDescription>Points: {points}</CardDescription>
+          <CardDescription>Due: </CardDescription>
         </div>
-        <div>Go to task</div>
+        <div>Points: {points}</div>
       </Button>
     </>
   );

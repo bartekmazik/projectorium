@@ -16,6 +16,7 @@ interface User {
   email: string;
   experience: number;
   level: number;
+  league: string;
 }
 
 interface UserContextType {
@@ -58,7 +59,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     setAccessToken(null);
   };
   useEffect(() => {
-    if (accessToken === null && !publicRoutes.includes(pathname)) {
+    if (!user && !publicRoutes.includes(pathname)) {
       router.push("/");
     }
   }, [accessToken, pathname, router]);

@@ -7,7 +7,7 @@ interface AvatarType {
   size: "big" | "small";
 }
 
-function UserAvatar({ firstName, lastName, size }: AvatarType) {
+function UserAvatar({ firstName = "A", lastName = "B", size }: AvatarType) {
   return (
     <>
       <Avatar

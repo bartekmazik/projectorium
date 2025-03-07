@@ -81,9 +81,9 @@ export default function Login() {
     });
 
     //authContext.setAuthToken(json.data.jwtToken);
-    toast.success("Zarenestrowano", {
+    toast.success("Registered successfuly!", {
       className:
-        "!border-green-200 !bg-gradient-to-t !from-[#00ff0006] !to-[#00ff0002]",
+        "!border-primary !bg-gradient-to-t !from-[#00ff0006] !to-[#00ff0002]",
       duration: 7 * 1000,
     });
     router.push("/auth/login");

@@ -18,10 +18,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  experience Int    @default(0)
-  
-  level      Int    @default(1)
-  league     League @default(BRONZE)
+  experience Int @default(0)
+
+  level  Int    @default(1)
+  league League @default(BRONZE)
 
   email String @unique
   hash  String
@@ -73,6 +73,7 @@ model Task {
   id          Int        @id @default(autoincrement())
   title       String
   description String
+  dueDate     DateTime
   status      TaskStatus @default(TODO)
   points      Int        @default(0)
   projectId   Int

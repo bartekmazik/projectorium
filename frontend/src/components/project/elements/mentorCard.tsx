@@ -9,15 +9,13 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CircleUserRound } from "lucide-react";
-import { SquareArrowOutUpRight } from "lucide-react";
-import Image from "next/image";
+
 import { useParams } from "next/navigation";
 const MentorCard = () => {
   const { id } = useParams();
   return (
     <>
-      <Card className=" w-96 m-2 flex flex-col justify-start items-start gap-4">
+      <Card className=" w-72 m-2 flex flex-col justify-start items-start gap-4">
         <CardHeader>
           <CardTitle>Your Mentor 🧠</CardTitle>
           <CardDescription>Get help from your AI Assistant</CardDescription>

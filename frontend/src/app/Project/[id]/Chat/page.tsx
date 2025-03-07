@@ -113,7 +113,7 @@ const Chat = () => {
     <div className="flex flex-col h-[80vh] w-full justify-between items-start p-4">
       <div className="font-bold text-3xl">Project Mentor 🧠</div>
       <ScrollArea className="w-full h-full my-4 flex flex-col-reverse ">
-        {messages ? (
+        {messages &&
           messages.map((message, i, row) => {
             return (
               <Message
@@ -123,10 +123,7 @@ const Chat = () => {
                 ref={i + 1 === row.length ? chatRef : null}
               />
             );
-          })
-        ) : (
-          <div>Not messages yet</div>
-        )}
+          })}
       </ScrollArea>
       <Form {...form}>
         <form

@@ -1,11 +1,12 @@
 "use client";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/lib/AuthProvider";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Homepage() {
-  const { accessToken } = useUser();
+  const { user } = useUser();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -18,13 +19,17 @@ export default function Homepage() {
       </h1>
       <div>Create your account and start managing your projects today!</div>
       <div className="flex gap-2">
-        <Link href="/auth/login">
-          <Button>Login</Button>
-        </Link>
-        <Link href="/auth/register">
-          <Button>Sign up</Button>
-        </Link>
-        {isClient && accessToken && (
+        {isClient && !user && (
+          <>
+            <Link href="/auth/login">
+              <Button>Login</Button>
+            </Link>
+            <Link href="/auth/register">
+              <Button>Sign up</Button>
+            </Link>
+          </>
+        )}
+        {isClient && user && (
           <Link href="/Dashboard">
             <Button>Go to dashboard</Button>
           </Link>

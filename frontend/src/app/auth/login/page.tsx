@@ -18,7 +18,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 //import { ApiResponse } from "@/common/objects/apiResponse";
-import { ChangeEvent, ChangeEventHandler, useContext } from "react";
+import { ChangeEvent, ChangeEventHandler, useContext, useState } from "react";
 //import { AuthContext } from "@/components/panel/authProvider";
 
 import {
@@ -42,6 +42,7 @@ const mySchema = z.object({
 export default function Login() {
   const router = useRouter();
   const { setAccessToken } = useUser();
+  const [error, setError] = useState<string>();
 
   const form = useForm({
     resolver: zodResolver(mySchema),
@@ -61,13 +62,16 @@ export default function Login() {
         "Content-Type": "application/json",
       },
     });
+    if (!res.ok) {
+      return setError("Niepoprawne dane");
+    }
 
     const json = await res.json();
     setAccessToken(json.access_token);
     //authContext.setAuthToken(json.data.jwtToken);
-    toast.success("Zalogowano", {
+    toast.success("Signed in successfuly!", {
       className:
-        "!border-green-200 !bg-gradient-to-t !from-[#00ff0006] !to-[#00ff0002]",
+        "!border-primary !bg-gradient-to-t !from-[#00ff0006] !to-[#00ff0002]",
       duration: 5 * 1000,
     });
     router.push("/");
@@ -122,30 +126,10 @@ export default function Login() {
                 </Link>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between">
-              <div className="flex items-center gap-2">
-                <FormField
-                  control={form.control}
-                  name="rememberMe"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center gap-2">
-                      <FormControl>
-                        <Checkbox
-                          name={field.name}
-                          onCheckedChange={(e) =>
-                            field.onChange(
-                              transformOutput(e.valueOf() as boolean)
-                            )
-                          }
-                          value={field.value ? "" : 0}
-                        />
-                      </FormControl>
-                      <FormLabel className="!m-0">Zapamiętaj mnie</FormLabel>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+            <CardFooter
+              className={`flex ${error ? "justify-between" : "justify-end"}`}
+            >
+              {error && <Label>{error}</Label>}
               <Button type="submit">Zaloguj się</Button>
             </CardFooter>
           </form>
