@@ -28,7 +28,7 @@ const mySchema = z.object({
 });
 
 const JoinProject = () => {
-  const { user, accessToken } = useUser();
+  const { accessToken } = useUser();
   const [open, setOpen] = useState(false);
 
   const form = useForm({
@@ -40,10 +40,9 @@ const JoinProject = () => {
 
   const onSubmit = async (data: { code: string }) => {
     try {
-      const object = { userid: user?.id, code: data.code };
       const res = await fetch("http://localhost:3333/project/join", {
         method: "POST",
-        body: JSON.stringify(object),
+        body: JSON.stringify(data.code),
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -54,8 +53,8 @@ const JoinProject = () => {
         throw new Error("Failed to join project");
       }
 
-      form.reset(); // Reset the form
-      setOpen(false); // Close the dialog
+      form.reset();
+      setOpen(false);
     } catch (error) {
       console.error("Error joining project:", error);
     }
@@ -108,7 +107,7 @@ const Toolbar = () => {
           <Button>Create new project</Button>
         </Link>
         <JoinProject />
-        <Button variant={"destructive"}>Delete project</Button>
+        {/* <Button variant={"destructive"}>Delete project</Button> */}
       </div>
     </div>
   );

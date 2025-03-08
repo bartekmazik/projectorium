@@ -29,10 +29,9 @@ import {
   FormLabel,
   FormMessage /*FormRootError*/,
 } from "@/components/ui/form";
-//import { toast } from "sonner";
+import { toast } from "sonner";
 import ImageSelect from "./ImageSelect";
 
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -42,31 +41,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DatePicker } from "./DatePicker";
 import { Ghost } from "lucide-react";
 import { useUser } from "@/lib/AuthProvider";
 
 const mySchema = z.object({
   name: z.string(),
   description: z.string(),
-  userId: z.number(),
-  teamMembers: z.array(z.string()).optional(),
-  projectType: z.string().optional(),
-  projectStatus: z.string().optional(),
-  projectStartDate: z.string().optional(),
-  projectEndDate: z.string().optional(),
-  projectImage: z.string().optional(),
+
+  // teamMembers: z.array(z.string()).optional(),
+  // projectType: z.string().optional(),
+  // projectStatus: z.string().optional(),
+  // projectStartDate: z.string().optional(),
+  // projectEndDate: z.string().optional(),
+  // projectImage: z.string().optional(),
 });
-export default function Login() {
+export default function CreateProject() {
   const router = useRouter();
-  const { user, accessToken } = useUser();
+  const { accessToken } = useUser();
 
   const form = useForm({
     resolver: zodResolver(mySchema),
     defaultValues: {
       name: "",
       description: "",
-      userId: user?.id,
+
       // projectType: "",
       // projectStatus: "",
       // projectStartDate: "",
@@ -74,15 +72,8 @@ export default function Login() {
       // projectImage: "",
     },
   });
-  useEffect(() => {
-    if (user?.id) {
-      form.setValue("userId", user.id);
-    }
-  }, [user?.id]);
 
   const onSubmit = async (prop: any) => {
-    console.log(prop);
-
     const res = await fetch("http://localhost:3333/project/create", {
       method: "POST",
       body: JSON.stringify(prop),
@@ -91,20 +82,13 @@ export default function Login() {
         Authorization: `Bearer ${accessToken} ` || "",
       },
     });
-    const json = res.json();
-    console.log(json);
 
-    //authContext.setAuthToken(json.data.jwtToken);
     toast.success("Projekt utworzony", {
       className:
         "!border-green-200 !bg-gradient-to-t !from-[#00ff0006] !to-[#00ff0002]",
       duration: 7 * 1000,
     });
-    router.push("/");
-  };
-
-  const transformOutput = (e: boolean) => {
-    return e;
+    router.push("/Dashboard");
   };
 
   return (

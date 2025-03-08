@@ -2,30 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ProjectDto } from './dto';
 import { JoinProjectDto } from './dto/joinproject.dto';
-import { GetProjectDto } from './dto/getproject.dto';
-import { GetProjectIdDto } from './dto/getprojectid.dto';
 import { Role } from '@prisma/client';
 
 @Injectable()
 export class ProjectService {
   constructor(private prisma: PrismaService) {}
-  async createProject(dto: ProjectDto) {
+  async createProject(dto: ProjectDto, userid: number) {
     const project = await this.prisma.project.create({
       data: {
         name: dto.name,
         description: dto.description,
         projectCode: String(Math.random()).slice(2, 8),
         users: {
-          create: [{ userId: dto.userId, role: Role.ADMIN }],
+          create: [{ userId: userid, role: Role.ADMIN }],
         },
       },
     });
     return { message: 'Project created', project };
   }
-  async joinProject(dto: JoinProjectDto) {
+  async joinProject(dto: JoinProjectDto, userid: number) {
     const user = await this.prisma.user.findUnique({
       where: {
-        id: dto.userid,
+        id: userid,
       },
     });
     if (!user) {
@@ -46,10 +44,10 @@ export class ProjectService {
       },
     });
   }
-  async getProjectBasics(dto: GetProjectDto) {
+  async getProjectBasics(userid) {
     const userProjects = await this.prisma.projectUser.findMany({
       where: {
-        userId: dto.userid,
+        userId: userid,
       },
       select: {
         project: {
@@ -64,37 +62,49 @@ export class ProjectService {
 
     return userProjects.map((p) => p.project); // Extracting the project details
   }
-  async findById(dto: GetProjectIdDto) {
-    const project = await this.prisma.project.findUnique({
+  async findProjectById(projectid: number, userid: number) {
+    const user = await this.prisma.project.findFirst({
       where: {
-        id: dto.id,
-      },
-    });
-    const team = await this.prisma.projectUser.findMany({
-      where: {
-        projectId: dto.id,
-      },
-      select: {
-        role: true,
-        user: {
-          select: {
-            id: true,
-            email: true,
-            firstName: true,
-            lastName: true,
+        users: {
+          some: {
+            user: {
+              id: userid,
+            },
           },
         },
       },
     });
+
+    if (!user) {
+      return 'user not in this project';
+    }
+    const project = await this.prisma.project.findUnique({
+      where: {
+        id: projectid,
+      },
+      select: {
+        name: true,
+        description: true,
+        projectCode: true,
+
+        users: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+              },
+            },
+            role: true,
+          },
+        },
+      },
+    });
+
     return {
-      project: project,
-      members: team.map((teamMember) => ({
-        email: teamMember.user.email,
-        firstName: teamMember.user.firstName,
-        lastName: teamMember.user.lastName,
-        role: teamMember.role,
-        id: teamMember.user.id,
-      })),
+      project,
     };
   }
 }

@@ -6,7 +6,4 @@ export class ProjectDto {
 
   @IsNotEmpty()
   description: string;
-
-  @IsNotEmpty()
-  userId: number;
 }

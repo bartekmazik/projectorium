@@ -32,6 +32,7 @@ import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { User } from "../page";
 
 const taskSchema = z.object({
   title: z.string().min(1, "Task title is required"),
@@ -80,7 +81,7 @@ const AddTask = ({ refetch }: { refetch: any }) => {
         }
 
         const json = await res.json();
-        setUsers(json.members);
+        setUsers(json.project.users);
       } catch (error) {
         console.error("Failed to fetch users:", error);
       }
@@ -210,10 +211,10 @@ const AddTask = ({ refetch }: { refetch: any }) => {
                   control={form.control}
                   name="dueDate"
                   render={({ field }) => (
-                    <FormItem className="relative">
-                      <FormLabel>Due Date</FormLabel>
+                    <FormItem className="relative flex flex-col justify-center gap-2">
+                      <FormLabel>End Date</FormLabel>
                       <Popover>
-                        <PopoverTrigger asChild>
+                        <PopoverTrigger asChild className="w-1/2">
                           <Button variant="outline">
                             {field.value
                               ? format(field.value, "PPP")
@@ -243,18 +244,21 @@ const AddTask = ({ refetch }: { refetch: any }) => {
                   <FormLabel>Assign to</FormLabel>
                   <div className="flex flex-col gap-2 mt-2">
                     {users.length > 0 ? (
-                      users.map((user) => (
+                      users.map((user: User) => (
                         <label
-                          key={user.id}
+                          key={user.user.id}
                           className="flex items-center gap-2"
                         >
                           <Checkbox
-                            checked={selectedUsers.includes(user.id)}
+                            checked={selectedUsers.includes(user.user.id)}
                             onCheckedChange={() =>
-                              handleCheckboxChange(user.id)
+                              handleCheckboxChange(user.user.id)
                             }
                           />
-                          {user.email}
+                          {`
+                          ${user.user.firstName} 
+                          ${user.user.lastName}
+                          `}
                         </label>
                       ))
                     ) : (

@@ -29,7 +29,7 @@ const ProjectCard = ({
             <CardDescription>{description}</CardDescription>
           </CardHeader>
 
-          <CardFooter>ASAS</CardFooter>
+          <CardFooter></CardFooter>
         </Card>
       </Link>
     </>

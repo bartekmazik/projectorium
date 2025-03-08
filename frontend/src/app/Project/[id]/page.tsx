@@ -16,15 +16,28 @@ import MentorCard from "@/components/project/elements/mentorCard";
 import ProfileCard from "@/components/project/elements/profileCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
+interface Project {
+  name: string;
+  description: string;
+  projectCode: string;
+  users: User[];
+}
+export interface User {
+  user: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    id: number;
+  };
+  role: string;
+}
 const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const { accessToken } = useUser();
-  const [project, setProject] = useState(null);
+  const [project, setProject] = useState<Project>();
 
   useEffect(() => {
-    // if (!id) return;
-
     const fetchData = async () => {
       setIsLoading(true);
       try {
@@ -38,7 +51,8 @@ const Page = () => {
 
         const json = await res.json();
 
-        setProject(json);
+        setProject(json.project);
+
         setTimeout(() => setIsLoading(false), 1000);
       } catch (error) {
         console.error("Error fetching project:", error);
@@ -56,22 +70,18 @@ const Page = () => {
         <Link href="/Dashboard">
           <ArrowLeft />
         </Link>
-        {project?.project.name}
+        {project?.name}
       </div>
+
       <div className="flex flex-row flex-wrap p-5 overflow-visible gap-3">
         <ProfileCard />
-        <TeamCard
-          users={project?.members || []}
-          code={project?.project.projectCode}
-        />
+        <TeamCard users={project?.users || []} code={project?.projectCode} />
         <TasksCard id={id as string} />
         <RankingCard />
         <NotesCard />
         <MentorCard />
-
         {/* <CalendarCard />
         <LinksCard />
-        
         <FinancesCard /> */}
       </div>
     </>

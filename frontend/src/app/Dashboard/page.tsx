@@ -8,24 +8,25 @@ import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
+interface ProjectButton {
+  name: string;
+  description: string;
+  id: number;
+}
+
 const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const { user, accessToken } = useUser();
+  const [projects, setProjects] = useState<ProjectButton[]>([]);
+  const { accessToken } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
-      router.push("/");
-      return;
-    }
-
     const GetProjects = async () => {
       try {
         setIsLoading(true);
         const res = await fetch("http://localhost:3333/project/projects", {
-          method: "POST",
-          body: JSON.stringify({ userid: user.id }),
+          method: "GET",
+
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken} ` || "",
@@ -37,6 +38,7 @@ const Page = () => {
         }
 
         const json = await res.json();
+
         setProjects(json);
         setTimeout(() => setIsLoading(false), 1000);
       } catch (error) {
@@ -46,10 +48,8 @@ const Page = () => {
       }
     };
 
-    if (user?.id) {
-      GetProjects();
-    }
-  }, [user, router]);
+    GetProjects();
+  }, [router]);
 
   return (
     <>
@@ -73,7 +73,12 @@ const Page = () => {
                 No projects found, create one!
               </Label>
               <div className="relative w-full h-1/4 ">
-                <Image src="/noprojects.svg" fill={true} alt="not found" />
+                <Image
+                  src="/noprojects.svg"
+                  fill={true}
+                  alt="not found"
+                  priority={true}
+                />
               </div>
             </div>
           )}

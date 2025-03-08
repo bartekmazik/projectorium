@@ -10,28 +10,32 @@ import {
 import { ProjectService } from './project.service';
 import { ProjectDto } from './dto';
 import { JoinProjectDto } from './dto/joinproject.dto';
-import { GetProjectDto } from './dto/getproject.dto';
 import { JwtGuard } from 'src/auth/guard';
+import { GetUser } from 'src/auth/decorator';
+import { User } from '@prisma/client';
 
 @UseGuards(JwtGuard)
 @Controller('project')
 export class ProjectController {
   constructor(private projectService: ProjectService) {}
   @Post('create')
-  createProject(@Body() dto: ProjectDto) {
-    return this.projectService.createProject(dto);
+  createProject(@GetUser() user: User, @Body() dto: ProjectDto) {
+    return this.projectService.createProject(dto, user.id);
   }
   @Post('join')
-  joinProject(@Body() dto: JoinProjectDto) {
-    return this.projectService.joinProject(dto);
+  joinProject(@GetUser() user: User, @Body() dto: JoinProjectDto) {
+    return this.projectService.joinProject(dto, user.id);
   }
 
-  @Post('projects')
-  getProjectBasics(@Body() dto: GetProjectDto) {
-    return this.projectService.getProjectBasics(dto);
+  @Get('projects')
+  getProjectBasics(@GetUser() user: User) {
+    return this.projectService.getProjectBasics(user.id);
   }
   @Get(':id')
-  getProject(@Param('id', new ParseIntPipe()) id: number) {
-    return this.projectService.findById({ id });
+  getProject(
+    @GetUser() user: User,
+    @Param('id', new ParseIntPipe()) id: number,
+  ) {
+    return this.projectService.findProjectById(id, user.id);
   }
 }

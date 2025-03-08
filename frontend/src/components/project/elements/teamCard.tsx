@@ -28,8 +28,9 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import UserAvatar from "@/components/UserAvatar";
+import { User } from "@/app/Project/[id]/page";
 
-const Member = ({ user }: any) => {
+const Member = ({ user, role }: any) => {
   return (
     <>
       <div className="flex flex-row items-center justify-between  py-1 ">
@@ -40,7 +41,7 @@ const Member = ({ user }: any) => {
             size="small"
           />
           <Label>{`${user.firstName} ${user.lastName}`}</Label>
-          {user.role === "ADMIN" ? <Label>(Admin)</Label> : <></>}
+          {role === "ADMIN" ? <Label>(Admin)</Label> : <></>}
         </div>
       </div>
     </>
@@ -48,7 +49,7 @@ const Member = ({ user }: any) => {
 };
 
 interface TeamCardProps {
-  users: any;
+  users: User[];
   code: string;
 }
 
@@ -66,8 +67,8 @@ const TeamCard = ({ users, code }: TeamCardProps) => {
             <CardTitle>Team 🙎</CardTitle>
           </CardHeader>
           <CardContent>
-            {users.map((user) => {
-              return <Member user={user} key={user.id} />;
+            {users.map((user: any, i: number) => {
+              return <Member user={user.user} role={user.role} key={i} />;
             })}
           </CardContent>
         </div>

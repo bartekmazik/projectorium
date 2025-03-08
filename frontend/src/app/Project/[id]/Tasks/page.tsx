@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 enum TaskStatus {
   TODO,
@@ -49,10 +50,19 @@ export interface Task {
   status: "TODO" | "SUBMITED" | "COMPLETED";
 }
 
-function Task({ task }: { task: Task }) {
+function Task({
+  task,
+  refetch,
+  setLoading,
+}: {
+  task: Task;
+  refetch: any;
+  setLoading: any;
+}) {
   const { id } = useParams();
   const { accessToken } = useUser();
   const [taskStatus, setTaskStatus] = useState<string>(task.status);
+
   const router = useRouter();
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -67,6 +77,7 @@ function Task({ task }: { task: Task }) {
     }
   };
   const handleTask = async (newStatus: string) => {
+    setLoading(true);
     try {
       const object = { status: newStatus, taskid: task.id };
 
@@ -83,16 +94,18 @@ function Task({ task }: { task: Task }) {
         throw new Error("Failed to change task status");
       }
       setTaskStatus(newStatus);
-      router.refresh();
+      refetch();
+      setTimeout(() => setLoading(false), 500);
     } catch (error) {
       console.error("Error joining project:", error);
+      setLoading(false);
     }
   };
 
   function ActionButton() {
     switch (taskStatus) {
       case "TODO": {
-        return <Button onClick={() => handleTask("SUBMITED")}>Return</Button>;
+        return <Button onClick={() => handleTask("SUBMITED")}>Hand-in</Button>;
       }
       case "SUBMITED": {
         switch (task.project.users[0].role) {
@@ -180,14 +193,14 @@ function Task({ task }: { task: Task }) {
 
 const page = () => {
   const [tasks, setTasks] = useState<Task[]>();
+  const [loading, setLoading] = useState(false);
 
   const { id } = useParams();
   const { accessToken } = useUser();
 
   const fetchData = async () => {
-    const projectId = Number(id);
     try {
-      const res = await fetch(`http://localhost:3333/task/get/${projectId}`, {
+      const res = await fetch(`http://localhost:3333/task/get/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${accessToken}` || "",
@@ -222,8 +235,19 @@ const page = () => {
         <AddTask refetch={fetchData} />
       </div>
       <div className="pt-8 w-full h-full">
-        {tasks && tasks.length > 0 ? (
-          tasks.reverse().map((task, i) => <Task task={task} key={i} />)
+        {loading ? (
+          <LoadingSpinner />
+        ) : tasks?.length > 0 ? (
+          tasks
+            .reverse()
+            .map((task, i) => (
+              <Task
+                task={task}
+                refetch={fetchData}
+                setLoading={setLoading}
+                key={i}
+              />
+            ))
         ) : (
           <div className="pt-4 w-full flex flex-col justify-start items-center gap-4">
             <Label className="font-semibold text-xl">
