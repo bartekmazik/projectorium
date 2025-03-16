@@ -86,6 +86,7 @@ export class ProjectService {
         name: true,
         description: true,
         projectCode: true,
+        milestones: true,
 
         users: {
           select: {

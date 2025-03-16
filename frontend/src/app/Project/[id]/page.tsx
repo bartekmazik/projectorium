@@ -15,12 +15,20 @@ import { ArrowLeft } from "lucide-react";
 import MentorCard from "@/components/project/elements/mentorCard";
 import ProfileCard from "@/components/project/elements/profileCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
-
+import MilestonesCard from "@/components/project/elements/milestonesCard";
+interface Milestone {
+  id: number;
+  title: string;
+  completedOn: Date;
+  projectId: number;
+  status: string;
+}
 interface Project {
   name: string;
   description: string;
   projectCode: string;
   users: User[];
+  milestones: Milestone[];
 }
 export interface User {
   user: {
@@ -50,6 +58,7 @@ const Page = () => {
         if (!res.ok) throw new Error("Failed to fetch project");
 
         const json = await res.json();
+        console.log(json);
 
         setProject(json.project);
 
@@ -80,6 +89,7 @@ const Page = () => {
         <RankingCard />
         <NotesCard />
         <MentorCard />
+        <MilestonesCard milestones={project?.milestones} />
         {/* <CalendarCard />
         <LinksCard />
         <FinancesCard /> */}

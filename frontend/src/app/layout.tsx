@@ -10,18 +10,20 @@ import "@/styles/globals.css";
 import { UserProvider } from "@/lib/AuthProvider";
 import { Toaster } from "sonner";
 import Footer from "@/components/footer";
+import { Inter } from "next/font/google";
 
-const fontSans = FontSans({
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
 });
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [isDark, setIsDark] = useState(false);
 
   return (
-    <html lang="en">
-      <body className={`${isDark === true ? "dark" : ""}`}>
+    <html lang="en" className={inter.variable}>
+      <body className={`${isDark === true ? "dark" : ""} `}>
         <main className="flex flex-col w-full">
           <UserProvider>
             <Toaster />
@@ -30,7 +32,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               <div
                 className={cn(
                   "max-w-screen-2xl w-full mx-28  mt-16",
-                  fontSans.variable
+                  inter.variable
                 )}
               >
                 {children}

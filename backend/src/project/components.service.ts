@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { addNoteDto } from './dto/note.dto';
 
 import { OpenAIService } from 'src/openai/openai.service';
+import { MilestoneStatus, Role } from '@prisma/client';
 
 @Injectable()
 export class ComponentsService {
@@ -253,5 +254,76 @@ Here is the current project data: Project name: ${project.name} Project descript
       },
     });
     return { chat: messages };
+  }
+  async setMilestone(
+    userId,
+    projectId,
+    milestoneData: {
+      title: string;
+    },
+  ) {
+    const adminCheck = await this.prisma.project.findFirst({
+      where: {
+        users: {
+          some: {
+            user: {
+              id: userId,
+            },
+            role: Role.ADMIN,
+          },
+        },
+        id: projectId,
+      },
+    });
+    if (!adminCheck) {
+      return 'Only admin of a project can set milestones';
+    }
+    const currentMilestones = await this.prisma.milestone.findMany({
+      where: {
+        projectId: projectId,
+      },
+    });
+    if (currentMilestones.length > 0) {
+      await this.prisma.milestone.updateMany({
+        data: {
+          status: MilestoneStatus.FINISHED,
+        },
+      });
+    }
+
+    await this.prisma.milestone.create({
+      data: {
+        title: milestoneData.title,
+        projectId: projectId,
+      },
+    });
+  }
+  async finishMilestone(userId, projectId, milestoneId) {
+    const adminCheck = await this.prisma.project.findFirst({
+      where: {
+        users: {
+          some: {
+            user: {
+              id: userId,
+            },
+            role: Role.ADMIN,
+          },
+        },
+        id: projectId,
+      },
+    });
+    if (!adminCheck) {
+      return 'Only admin of a project can set milestones';
+    }
+    const finishDate = new Date();
+    await this.prisma.milestone.update({
+      where: {
+        id: milestoneId,
+      },
+      data: {
+        status: MilestoneStatus.FINISHED,
+        completedOn: finishDate,
+      },
+    });
   }
 }

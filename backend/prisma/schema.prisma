@@ -49,9 +49,10 @@ model Project {
 
   users ProjectUser[]
 
-  tasks Task[]
-  notes Note[]
-  Chat  Chat[]
+  tasks      Task[]
+  notes      Note[]
+  milestones Milestone[]
+  Chat       Chat[]
 
   @@map("projects")
 }
@@ -107,6 +108,15 @@ model Note {
   @@map("notes")
 }
 
+model Milestone {
+  id          Int       @id @default(autoincrement())
+  title       String
+  status MilestoneStatus @default(WORKING)
+  completedOn DateTime?
+  projectId   Int
+  project     Project   @relation(fields: [projectId], references: [id])
+}
+
 model Chat {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -146,7 +156,11 @@ enum ChatRole {
   MENTOR
   USER
 }
-
+enum MilestoneStatus {
+  FINISHED
+  WORKING
+  UPCOMING
+}
 enum TaskStatus {
   TODO
   SUBMITED

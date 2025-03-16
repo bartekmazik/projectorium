@@ -52,4 +52,20 @@ export class ComponentsController {
   ) {
     return this.ComponentsService.getMessages(user.id, id);
   }
+  @Post('/:id/milestone/add')
+  addMilestone(
+    @GetUser() user: User,
+    @Body() milestoneData: { title: string },
+    @Param('id', new ParseIntPipe()) id: number,
+  ) {
+    return this.ComponentsService.setMilestone(user.id, id, milestoneData);
+  }
+  @Post('/:id/milestone/finish')
+  finishMilestone(
+    @GetUser() user: User,
+    @Body() milestoneId: string,
+    @Param('id', new ParseIntPipe()) id: number,
+  ) {
+    return this.ComponentsService.finishMilestone(user.id, id, milestoneId);
+  }
 }
