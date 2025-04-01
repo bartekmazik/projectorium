@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ProjectDto } from './dto';
 import { JoinProjectDto } from './dto/joinproject.dto';
-import { Role } from '@prisma/client';
+import { MilestoneStatus, Role } from '@prisma/client';
 
 @Injectable()
 export class ProjectService {
@@ -21,14 +21,6 @@ export class ProjectService {
     return { message: 'Project created', project };
   }
   async joinProject(dto: JoinProjectDto, userid: number) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: userid,
-      },
-    });
-    if (!user) {
-      throw new Error('Login before joining project');
-    }
     const project = await this.prisma.project.findUnique({
       where: {
         projectCode: dto.code,
@@ -39,7 +31,7 @@ export class ProjectService {
     }
     await this.prisma.projectUser.create({
       data: {
-        userId: user.id,
+        userId: userid,
         projectId: project.id,
       },
     });
@@ -55,6 +47,14 @@ export class ProjectService {
             id: true,
             name: true,
             description: true,
+            milestones: {
+              where: {
+                status: MilestoneStatus.WORKING,
+              },
+              select: {
+                title: true,
+              },
+            },
           },
         },
       },
@@ -86,7 +86,12 @@ export class ProjectService {
         name: true,
         description: true,
         projectCode: true,
-        milestones: true,
+        milestones: {
+          take: 4,
+          orderBy: {
+            id: 'desc',
+          },
+        },
 
         users: {
           select: {

@@ -16,6 +16,7 @@ import MentorCard from "@/components/project/elements/mentorCard";
 import ProfileCard from "@/components/project/elements/profileCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MilestonesCard from "@/components/project/elements/milestonesCard";
+import useProject from "@/app/hooks/useProject";
 interface Milestone {
   id: number;
   title: string;
@@ -40,36 +41,10 @@ export interface User {
   role: string;
 }
 const Page = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const { accessToken } = useUser();
-  const [project, setProject] = useState<Project>();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetch(`http://localhost:3333/project/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}` || "",
-          },
-        });
-
-        if (!res.ok) throw new Error("Failed to fetch project");
-
-        const json = await res.json();
-        console.log(json);
-
-        setProject(json.project);
-
-        setTimeout(() => setIsLoading(false), 1000);
-      } catch (error) {
-        console.error("Error fetching project:", error);
-      }
-    };
-
-    fetchData();
-  }, [id]);
+  const { project, isLoading, refetch } = useProject();
 
   return isLoading ? (
     <LoadingSpinner />
@@ -89,7 +64,7 @@ const Page = () => {
         <RankingCard />
         <NotesCard />
         <MentorCard />
-        <MilestonesCard milestones={project?.milestones} />
+        <MilestonesCard milestones={project?.milestones} refetch={refetch} />
         {/* <CalendarCard />
         <LinksCard />
         <FinancesCard /> */}

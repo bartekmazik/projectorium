@@ -11,6 +11,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 interface ProjectButton {
   name: string;
   description: string;
+  milestones: any;
   id: number;
 }
 
@@ -57,7 +58,7 @@ const Page = () => {
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div className="h-screen w-full flex flex-row p-4 gap-4">
+        <div className="h-screen w-full flex flex-col sm:flex-row sm:p-4 gap-4">
           {projects.length > 0 ? (
             projects.map((project) => (
               <ProjectCard
@@ -65,6 +66,7 @@ const Page = () => {
                 id={project.id}
                 name={project.name}
                 description={project.description}
+                milestone={project.milestones[0]}
               />
             ))
           ) : (

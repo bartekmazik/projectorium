@@ -72,7 +72,7 @@ export default function Login() {
       firstName: prop.firstName,
       lastName: prop.lastName,
     };
-    const res = await fetch("http://localhost:3333/auth/signup", {
+    await fetch("http://localhost:3333/auth/signup", {
       method: "POST",
       body: JSON.stringify(object),
       headers: {

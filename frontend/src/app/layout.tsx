@@ -31,7 +31,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <div className="flex flex-row">
               <div
                 className={cn(
-                  "max-w-screen-2xl w-full mx-28  mt-16",
+                  "max-w-screen-2xl w-full mx-6 sm:mx-28 mt-20",
                   inter.variable
                 )}
               >

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import useProject from "@/app/hooks/useProject";
 
 enum Stage {
   COMPLETED,
@@ -35,7 +36,13 @@ interface Milestone {
   status: string;
 }
 
-const MilestonesCard = ({ milestones }: { milestones: Milestone[] }) => {
+const MilestonesCard = ({
+  milestones,
+  refetch,
+}: {
+  milestones: Milestone[];
+  refetch: any;
+}) => {
   const [currentStage, setCurrentStage] = useState<Milestone>();
   const [completedStages, setCompletedStages] = useState<Milestone[]>([]);
   const [newMilestone, setNewMilestone] = useState("");
@@ -43,7 +50,6 @@ const MilestonesCard = ({ milestones }: { milestones: Milestone[] }) => {
   const { id } = useParams();
 
   async function addMilestone() {
-    console.log(newMilestone);
     if (!newMilestone) return;
     const milestoneData = { title: newMilestone };
     try {
@@ -59,6 +65,7 @@ const MilestonesCard = ({ milestones }: { milestones: Milestone[] }) => {
         description: `The milestone "${newMilestone}" was added.`,
       });
       setNewMilestone("");
+      refetch();
     } catch (error: any) {
       toast.error("Error adding milestone", {
         description: error.message || "Something went wrong.",
@@ -100,7 +107,7 @@ const MilestonesCard = ({ milestones }: { milestones: Milestone[] }) => {
           </DialogContent>
         </Dialog>
       </CardHeader>
-      <CardContent className="pt-4">
+      <CardContent className="py-4">
         <div className="p-3 bg-primary/10 rounded-md mb-6">
           {currentStage ? (
             <p className="font-medium text-primary">{currentStage?.title}</p>
@@ -108,24 +115,26 @@ const MilestonesCard = ({ milestones }: { milestones: Milestone[] }) => {
             <div>Dodaj milestone</div>
           )}
         </div>
-        <>
-          <h3 className="text-sm font-medium text-muted-foreground mb-3">
-            Completed Stages
-          </h3>
-          <div className="space-y-3">
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-              <div>
-                {completedStages.length > 0 &&
-                  completedStages.map((stage) => (
-                    <p key={stage.id} className="font-medium">
-                      {stage.title}
-                    </p>
-                  ))}
+        {completedStages.length > 0 && (
+          <>
+            <h3 className="text-sm font-medium text-muted-foreground mb-3">
+              Completed Stages
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                <div>
+                  {completedStages.length > 0 &&
+                    completedStages.map((stage) => (
+                      <p key={stage.id} className="font-medium">
+                        {stage.title}
+                      </p>
+                    ))}
+                </div>
               </div>
             </div>
-          </div>
-        </>
+          </>
+        )}
       </CardContent>
     </Card>
   );

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useUser } from "@/lib/AuthProvider";
+import useProject from "../hooks/useProject";
 
 const mySchema = z.object({
   code: z.string().min(1, "Code is required"),
@@ -30,6 +31,7 @@ const mySchema = z.object({
 const JoinProject = () => {
   const { accessToken } = useUser();
   const [open, setOpen] = useState(false);
+  const { refetch } = useProject();
 
   const form = useForm({
     resolver: zodResolver(mySchema),
@@ -42,7 +44,7 @@ const JoinProject = () => {
     try {
       const res = await fetch("http://localhost:3333/project/join", {
         method: "POST",
-        body: JSON.stringify(data.code),
+        body: JSON.stringify({ code: data.code }),
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -55,6 +57,7 @@ const JoinProject = () => {
 
       form.reset();
       setOpen(false);
+      await refetch();
     } catch (error) {
       console.error("Error joining project:", error);
     }
@@ -65,9 +68,11 @@ const JoinProject = () => {
       <DialogTrigger asChild>
         <Button>Join project</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-full max-w-[90%] sm:max-w-[425px] p-4 sm:p-6 rounded-xl">
         <DialogHeader>
-          <DialogTitle>Enter project code</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">
+            Enter project code
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -82,15 +87,17 @@ const JoinProject = () => {
                   <FormItem>
                     <FormLabel>Code</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} className="w-full" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <DialogFooter>
-              <Button type="submit">Join project</Button>
+            <DialogFooter className="flex justify-end">
+              <Button type="submit" className="w-full sm:w-auto">
+                Join project
+              </Button>
             </DialogFooter>
           </form>
         </Form>
@@ -102,7 +109,7 @@ const JoinProject = () => {
 const Toolbar = () => {
   return (
     <div className="w-full h-16 ">
-      <div className="flex items-center justify-start gap-6 h-full px-6">
+      <div className="flex items-center justify-between sm:justify-start gap-6 h-full sm:px-6">
         <Link href="/Dashboard/ProjectCreator">
           <Button>Create new project</Button>
         </Link>

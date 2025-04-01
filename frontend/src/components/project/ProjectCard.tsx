@@ -15,21 +15,29 @@ const ProjectCard = ({
   id,
   name,
   description,
+  milestone,
 }: {
   id: number;
   name: string;
   description: string;
+  milestone: any;
 }) => {
   return (
     <>
-      <Link href={`/Project/${id}`} className="h-48 w-64">
-        <Card className="h-48 w-64 m-2 flex transition-colors hover:bg-accent hover:text-accent-foreground flex-col justify-between">
+      <Link href={`/Project/${id}`} className="h-48 w-full sm:w-64">
+        <Card className="h-48 w-full sm:w-64 my-2 flex transition-colors hover:bg-accent hover:text-accent-foreground flex-col justify-between">
           <CardHeader>
             <CardTitle>{name}</CardTitle>
             <CardDescription>{description}</CardDescription>
           </CardHeader>
 
-          <CardFooter></CardFooter>
+          <CardFooter>
+            {milestone ? (
+              <div>Stage: {milestone?.title}</div>
+            ) : (
+              <div>Stage: No stage yet</div>
+            )}
+          </CardFooter>
         </Card>
       </Link>
     </>

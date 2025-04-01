@@ -298,6 +298,7 @@ Here is the current project data: Project name: ${project.name} Project descript
       },
     });
   }
+  //add use case later
   async finishMilestone(userId, projectId, milestoneId) {
     const adminCheck = await this.prisma.project.findFirst({
       where: {

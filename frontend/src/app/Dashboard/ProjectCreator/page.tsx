@@ -107,12 +107,12 @@ export default function CreateProject() {
           <CardContent>
             <div className="flex flex-col gap-6">
               <div className="flex flex-row">
-                <div className="w-1/2 flex flex-col gap-6">
+                <div className="w-full sm:w-1/2 flex flex-col gap-6">
                   <FormField
                     control={form.control}
                     name="name"
                     render={({ field }) => (
-                      <FormItem className="w-4/5">
+                      <FormItem className="sm:w-4/5">
                         <FormLabel>Project name</FormLabel>
                         <FormControl>
                           <Input {...field} />
@@ -129,7 +129,7 @@ export default function CreateProject() {
                         <FormLabel>Description of your project</FormLabel>
                         <FormControl>
                           <Textarea
-                            className="w-4/5 h-32 max-h-64"
+                            className="sm:w-4/5 h-32 max-h-64"
                             {...field}
                           />
                         </FormControl>
@@ -208,8 +208,10 @@ export default function CreateProject() {
               /> */}
             </div>
           </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button type="submit">Create project</Button>
+          <CardFooter className="flex  justify-between">
+            <Button type="submit" className="w-full sm:w-auto">
+              Create project
+            </Button>
           </CardFooter>
         </form>
       </Form>
