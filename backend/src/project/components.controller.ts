@@ -12,6 +12,7 @@ import { JwtGuard } from 'src/auth/guard';
 import { GetUser } from 'src/auth/decorator';
 import { User } from '@prisma/client';
 import { addNoteDto } from './dto/note.dto';
+import { ChangeStatusDto, TaskDto } from './dto/task.dto';
 
 @UseGuards(JwtGuard)
 @Controller('project')
@@ -67,5 +68,17 @@ export class ComponentsController {
     @Param('id', new ParseIntPipe()) id: number,
   ) {
     return this.ComponentsService.finishMilestone(user.id, id, milestoneId);
+  }
+  @Post('/:id/task')
+  createTask(@Body() dto: TaskDto) {
+    return this.ComponentsService.createTask(dto);
+  }
+  @Post('/:id/changetaskstatus')
+  changeTaskStatus(@Body() dto: ChangeStatusDto) {
+    return this.ComponentsService.changeTaskStatus(dto);
+  }
+  @Get('/:id/task')
+  getTask(@GetUser() user: User, @Param('id', new ParseIntPipe()) id: number) {
+    return this.ComponentsService.getTasks(id, user.id);
   }
 }

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/lib/AuthProvider";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Plus, PlusCircle } from "lucide-react";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import {
@@ -85,23 +85,25 @@ const MilestonesCard = ({
   }, [milestones]);
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="border-b pb-3 flex flex-row justify-between items-center">
-        <CardTitle className="text-2xl">Current Stage</CardTitle>
+    <Card className="w-full m-2 max-w-md">
+      <CardHeader className="border-b  flex flex-row justify-between items-center">
+        <CardTitle className="text-2xl">Current Objective 🎯</CardTitle>
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="ghost">+</Button>
+            <Button variant="ghost">
+              <PlusCircle />
+            </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="w-full flex flex-col max-w-[90%] sm:max-w-[425px] p-4 sm:p-6 rounded-xl z-[10000]">
             <DialogHeader>
-              <DialogTitle>Add Milestone</DialogTitle>
+              <DialogTitle>Add objective</DialogTitle>
             </DialogHeader>
             <Input
               placeholder="Milestone title"
               value={newMilestone}
               onChange={(e) => setNewMilestone(e.target.value)}
             />
-            <DialogClose>
+            <DialogClose className="self-end">
               <Button onClick={addMilestone}>Add</Button>
             </DialogClose>
           </DialogContent>
@@ -112,7 +114,7 @@ const MilestonesCard = ({
           {currentStage ? (
             <p className="font-medium text-primary">{currentStage?.title}</p>
           ) : (
-            <div>Dodaj milestone</div>
+            <div>No objectives yet</div>
           )}
         </div>
         {completedStages.length > 0 && (

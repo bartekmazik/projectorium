@@ -81,14 +81,17 @@ function Task({
     try {
       const object = { status: newStatus, taskid: task.id };
 
-      const res = await fetch(`http://localhost:3333/task/${id}/changestatus`, {
-        method: "POST",
-        body: JSON.stringify(object),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await fetch(
+        `http://localhost:3333/project/${id}/changetaskstatus`,
+        {
+          method: "POST",
+          body: JSON.stringify(object),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (!res.ok) {
         throw new Error("Failed to change task status");
@@ -143,7 +146,7 @@ function Task({
   }
 
   return (
-    <Card className="w-full p-4 md:p-6">
+    <Card className="w-full my-2 p-4 md:p-6">
       <div className="grid gap-4 md:grid-cols-[1fr_auto]">
         <div className="space-y-4">
           <div>
@@ -200,7 +203,7 @@ const page = () => {
 
   const fetchData = async () => {
     try {
-      const res = await fetch(`http://localhost:3333/task/get/${id}`, {
+      const res = await fetch(`http://localhost:3333/project/${id}/task`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${accessToken}` || "",
@@ -237,7 +240,7 @@ const page = () => {
       <div className="pt-8 w-full h-full">
         {loading ? (
           <LoadingSpinner />
-        ) : tasks?.length > 0 ? (
+        ) : tasks && tasks?.length > 0 ? (
           tasks
             .reverse()
             .map((task, i) => (

@@ -32,7 +32,7 @@ const noteSchema = z.object({
   description: z.string().min(1, "Note is required"),
 });
 
-const AddNote = () => {
+const AddNote = ({ refetch }: { refetch: any }) => {
   const { user, accessToken } = useUser();
   const [open, setOpen] = useState(false);
   const { id } = useParams();
@@ -72,6 +72,7 @@ const AddNote = () => {
 
       form.reset();
       setOpen(false);
+      refetch();
     } catch (error) {
       console.error("Error creating note:", error);
     }
@@ -83,7 +84,7 @@ const AddNote = () => {
         <DialogTrigger asChild>
           <Button>Add Note</Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] z-[100000]">
+        <DialogContent className="w-full max-w-[90%] sm:max-w-[425px] p-4 sm:p-6 rounded-xl z-[100000]">
           <DialogHeader>
             <DialogTitle>Create a Note</DialogTitle>
           </DialogHeader>
@@ -120,7 +121,7 @@ const AddNote = () => {
                   )}
                 />
               </div>
-              <DialogFooter>
+              <DialogFooter className="flex flex-col gap-4">
                 <Label>
                   Your note will be visible for all members of your project
                 </Label>

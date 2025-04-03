@@ -5,7 +5,6 @@ import { ProjectModule } from './project/project.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from './auth/strategy';
-import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -15,7 +14,6 @@ import { TaskModule } from './task/task.module';
     AuthModule,
     UserModule,
     ProjectModule,
-    TaskModule,
     PrismaModule,
   ],
   providers: [JwtStrategy],

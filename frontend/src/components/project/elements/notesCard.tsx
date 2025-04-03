@@ -78,7 +78,7 @@ const NotesCard = () => {
   }, [id]);
   return (
     <>
-      <Card className="w-96 m-2 flex flex-col justify-between items-start">
+      <Card className="w-full min-h-48 m-2 flex flex-col justify-between items-start">
         <div className="w-full">
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle>Notes 🗒️</CardTitle>

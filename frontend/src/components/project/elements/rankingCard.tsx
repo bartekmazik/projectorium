@@ -51,7 +51,7 @@ const RankingCard = () => {
   }, [accessToken, id]);
   return (
     <>
-      <Card className="w-96 m-2 flex flex-col justify-between items-start">
+      <Card className="w-full m-2 flex flex-col justify-between items-start">
         <div className="w-full">
           <CardHeader>
             <CardTitle>Ranking 🏆</CardTitle>

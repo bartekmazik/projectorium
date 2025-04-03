@@ -15,7 +15,7 @@ const MentorCard = () => {
   const { id } = useParams();
   return (
     <>
-      <Card className=" w-72 m-2 flex flex-col justify-start items-start gap-4">
+      <Card className=" w-full m-2 flex flex-col justify-start items-start gap-4">
         <CardHeader>
           <CardTitle>Your Mentor 🧠</CardTitle>
           <CardDescription>Get help from your AI Assistant</CardDescription>

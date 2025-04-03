@@ -122,7 +122,7 @@ const AddTask = ({ refetch }: { refetch: any }) => {
         dueDate: data.dueDate.toISOString(),
       };
 
-      const res = await fetch("http://localhost:3333/task/create", {
+      const res = await fetch(`http://localhost:3333/project/${id}/task`, {
         method: "POST",
         body: JSON.stringify(taskObject),
         headers: {
@@ -150,7 +150,7 @@ const AddTask = ({ refetch }: { refetch: any }) => {
         <DialogTrigger asChild>
           <Button>Add Task</Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] z-[10000]">
+        <DialogContent className="w-full max-w-[90%] sm:max-w-[425px] p-4 sm:p-6 rounded-xl z-[10000]">
           <DialogHeader>
             <DialogTitle>Create a Task</DialogTitle>
             <DialogDescription>
@@ -224,7 +224,7 @@ const AddTask = ({ refetch }: { refetch: any }) => {
                         <PopoverContent
                           className="w-auto p-0 z-[100001]"
                           align="start"
-                          side="bottom"
+                          side="top"
                         >
                           <Calendar
                             mode="single"
@@ -267,7 +267,7 @@ const AddTask = ({ refetch }: { refetch: any }) => {
                   </div>
                 </div>
               </div>
-              <DialogFooter>
+              <DialogFooter className="py-4">
                 <Button type="submit">Create Task</Button>
               </DialogFooter>
             </form>

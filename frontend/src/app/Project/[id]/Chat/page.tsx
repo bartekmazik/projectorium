@@ -14,6 +14,8 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useUser } from "@/lib/AuthProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -40,7 +42,10 @@ const Message = React.forwardRef<
   }
   aligment();
   return (
-    <Card ref={ref} className={`w-2/5 text-sm ${aligment()} px-4 py-2`}>
+    <Card
+      ref={ref}
+      className={`w-3/4 my-2 sm:w-2/5 text-sm ${aligment()} px-4 py-2`}
+    >
       <Label>{content}</Label>
     </Card>
   );
@@ -111,7 +116,14 @@ const Chat = () => {
 
   return (
     <div className="flex flex-col h-[80vh] w-full justify-between items-start p-4">
-      <div className="font-bold text-3xl">Project Mentor 🧠</div>
+      <div className="flex flex-row justify-center items-center gap-2 text-3xl font-semibold">
+        <Link href={`/Project/${id}`}>
+          <Button variant={"ghost"}>
+            <ArrowLeft />
+          </Button>
+        </Link>
+        Project Mentor 🧠
+      </div>
       <ScrollArea className="w-full h-full my-4 flex flex-col-reverse ">
         {messages &&
           messages.map((message, i, row) => {

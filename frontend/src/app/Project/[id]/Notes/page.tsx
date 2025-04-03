@@ -11,7 +11,11 @@ import {
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { CircleUserRound, SquareArrowOutUpRight } from "lucide-react";
+import {
+  ArrowLeft,
+  CircleUserRound,
+  SquareArrowOutUpRight,
+} from "lucide-react";
 import { useParams } from "next/navigation";
 import { useUser } from "@/lib/AuthProvider";
 import AddNote from "./addNote";
@@ -54,7 +58,7 @@ const Note = ({ note }: { note: Note }) => {
           variant={"ghost"}
           className="flex flex-col justify-start items-start"
         >
-          <Card className="w-96 min-h-48  hover:cursor-pointer">
+          <Card className="w-full sm:min-w-96 min-h-48  hover:cursor-pointer">
             <CardHeader>
               <CardTitle>{note.title}</CardTitle>
               <CardDescription>{noteDate}</CardDescription>
@@ -63,8 +67,8 @@ const Note = ({ note }: { note: Note }) => {
           </Card>
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[90vw]  max-w-4xl">
-        <DialogHeader>
+      <DialogContent className="w-full max-w-[90%] p-4 sm:p-6 rounded-xl z-[10000] sm:w-[90vw]  sm:max-w-4xl">
+        <DialogHeader className="flex flex-col items-start">
           <DialogTitle>{note.title}</DialogTitle>
           <DialogDescription>
             {noteDate} by {note.createdBy.firstName} {note.createdBy.lastName}
@@ -81,37 +85,39 @@ const Notes = () => {
   const { accessToken } = useUser();
   const [notes, setNotes] = useState<Note[]>();
 
-  useEffect(() => {
-    if (!id) return;
+  const fetchData = async () => {
+    try {
+      const res = await fetch(`http://localhost:3333/project/${id}/note`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}` || "",
+        },
+      });
 
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`http://localhost:3333/project/${id}/note`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}` || "",
-          },
-        });
+      if (!res.ok) throw new Error("Failed to fetch notes");
 
-        if (!res.ok) throw new Error("Failed to fetch notes");
-
-        const json = await res.json();
-        setNotes(json.notes);
-      } catch (error) {
-        console.error("Error fetching project:", error);
-      }
-    };
-
-    fetchData();
-  }, [id]);
+      const json = await res.json();
+      setNotes(json.notes);
+    } catch (error) {
+      console.error("Error fetching project:", error);
+    }
+  };
+  fetchData();
 
   return (
-    <div className="m-8 flex flex-col gap-4">
+    <div className="my-4 sm:my-8 flex flex-col gap-4">
       <div className="flex flex-row items-center justify-between ">
-        <Label className="text-3xl">Notes</Label>
-        <AddNote />
+        <div className="flex flex-row justify-center items-center gap-2 text-3xl font-semibold">
+          <Link href={`/Project/${id}`}>
+            <Button variant={"ghost"}>
+              <ArrowLeft />
+            </Button>
+          </Link>
+          Notes 🗒️
+        </div>
+        <AddNote refetch={fetchData} />
       </div>
-      <div className="flex flex-row justify-start items-center gap-2">
+      <div className="flex flex-col sm:flex-row justify-start items-center gap-2">
         {notes && notes.length > 0 ? (
           notes.map((note: Note, i) => {
             return <Note key={note.id} note={note} />;

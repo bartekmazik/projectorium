@@ -78,7 +78,7 @@ const TasksCard = ({ id }: { id: string }) => {
 
   return (
     <>
-      <Card className="w-96 m-2 flex flex-col justify-between">
+      <Card className="w-full m-2 flex flex-col justify-between">
         <CardHeader className="flex flex-row justify-between items-center ">
           <CardTitle>Tasks 📝</CardTitle>
           <Link href={`/Project/${id}/Tasks`}>

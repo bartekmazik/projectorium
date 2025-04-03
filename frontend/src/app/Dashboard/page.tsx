@@ -74,7 +74,7 @@ const Page = () => {
               <Label className="font-semibold text-2xl">
                 No projects found, create one!
               </Label>
-              <div className="relative w-full h-1/4 ">
+              <div className="relative w-full h-40 sm:h-1/4 ">
                 <Image
                   src="/noprojects.svg"
                   fill={true}

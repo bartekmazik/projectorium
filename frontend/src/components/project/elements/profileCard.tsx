@@ -39,7 +39,7 @@ const ProfileCard = () => {
     (profile.currentPoints / profile.pointsToNextLevel) * 100;
 
   return (
-    <Card className="w-96 m-2 overflow-hidden ">
+    <Card className="w-full m-2 overflow-hidden ">
       <CardHeader className="p-6 pb-0 flex flex-row items-center gap-4">
         <div className="flex-1">
           <h2 className="text-2xl font-bold">{profile.firstName}</h2>

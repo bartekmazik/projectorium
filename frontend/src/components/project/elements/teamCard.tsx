@@ -61,7 +61,7 @@ const TeamCard = ({ users, code }: TeamCardProps) => {
 
   return (
     <>
-      <Card className=" w-64 m-2 flex flex-col justify-between">
+      <Card className=" w-full m-2 flex flex-col justify-between">
         <div>
           <CardHeader className="flex flex-row justify-between">
             <CardTitle>Team 🙎</CardTitle>
@@ -77,9 +77,9 @@ const TeamCard = ({ users, code }: TeamCardProps) => {
             <DialogTrigger asChild>
               <Button>Add members</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="w-full max-w-[90%] sm:max-w-[425px] min-h-36 p-4 sm:p-6 rounded-xl">
               <DialogHeader>
-                <DialogTitle>
+                <DialogTitle className="w-4/5 text-start">
                   Share this code with people you want to join your project
                 </DialogTitle>
               </DialogHeader>
