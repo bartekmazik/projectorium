@@ -5,6 +5,9 @@ const nextConfig = {
   experimental: {
     instrumentationHook: true,
   },
+  env: {
+    URL: process.env.URL,
+  },
 };
 
 export default nextConfig;

@@ -19,6 +19,34 @@ interface User {
   };
   role: string;
 }
+enum TaskStatus {
+  TODO,
+  SUBMITED,
+  COMPLETED,
+  DELETED,
+}
+
+interface TaskMember {
+  user: {
+    firstName: string;
+    lastName: string;
+  };
+}
+interface TaskRole {
+  users: {
+    role: string;
+  }[];
+}
+
+interface Task {
+  id: number;
+  title: string;
+  dueDate: Date;
+  description: string;
+  assignedTo: TaskMember[];
+  project: TaskRole;
+  status: "TODO" | "SUBMITED" | "COMPLETED";
+}
 
 interface Project {
   name: string;
@@ -26,6 +54,7 @@ interface Project {
   projectCode: string;
   users: User[];
   milestones: Milestone[];
+  tasks: Task[];
 }
 
 const useProject = () => {
@@ -46,6 +75,7 @@ const useProject = () => {
       if (!res.ok) throw new Error("Failed to fetch project");
 
       const json = await res.json();
+      console.log(json);
       setProject(json.project);
     } catch (error) {
       console.error("Error fetching project:", error);

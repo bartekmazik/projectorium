@@ -44,6 +44,7 @@ export interface Task {
   id: number;
   title: string;
   dueDate: Date;
+  points: number;
   description: string;
   assignedTo: TaskMember[];
   project: TaskRole;

@@ -128,8 +128,8 @@ const MilestonesCard = ({
               <div className="flex items-start gap-2">
                 <div className="text-wrap overflow-y-scroll">
                   {completedStages.length > 0 &&
-                    completedStages.map((stage) => (
-                      <div className="flex flex-row items-start gap-2">
+                    completedStages.map((stage, i) => (
+                      <div className="flex flex-row items-start gap-2" key={i}>
                         <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
                         <p
                           key={stage.id}

@@ -60,7 +60,7 @@ const Page = () => {
       <div className="flex flex-col sm:grid sm:grid-cols-3 p-5 overflow-visible gap-3">
         <ProfileCard />
         <TeamCard users={project?.users || []} code={project?.projectCode} />
-        <TasksCard id={id as string} />
+        <TasksCard tasks={project?.tasks} />
         <RankingCard />
         <NotesCard />
         <MentorCard />

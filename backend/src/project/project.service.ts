@@ -92,6 +92,15 @@ export class ProjectService {
             id: 'desc',
           },
         },
+        tasks: {
+          where: {
+            assignedTo: {
+              some: {
+                userId: userid,
+              },
+            },
+          },
+        },
 
         users: {
           select: {
