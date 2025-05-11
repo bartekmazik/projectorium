@@ -63,7 +63,6 @@ function Task({
   const { accessToken } = useUser();
   const [taskStatus, setTaskStatus] = useState<string>(task.status);
 
-  const router = useRouter();
   const getStatusColor = (status: string) => {
     switch (status) {
       case "TODO":
@@ -146,14 +145,14 @@ function Task({
   }
 
   return (
-    <Card className="w-full my-2 p-4 md:p-6">
+    <Card className="w-full my-2 p-4 md:p-6 overflow-hidden ">
       <div className="grid gap-4 md:grid-cols-[1fr_auto]">
         <div className="space-y-4">
-          <div>
-            <h3 className="font-semibold leading-none tracking-tight">
+          <div className="w-2/3 text-wrap">
+            <h3 className="w-[70vw]  font-semibold break-words line-clamp-3">
               {task.title}
             </h3>
-            <p className="text-sm text-muted-foreground mt-2">
+            <p className="w-[70vw] text-sm text-muted-foreground mt-2 break-words line-clamp-10 ">
               {task.description}
             </p>
           </div>
@@ -220,9 +219,9 @@ const page = () => {
     }
   };
   useEffect(() => {
-    if (!id || !accessToken) return; // Avoid unnecessary requests
+    if (!id || !accessToken) return;
     fetchData();
-  }, [id, accessToken]); // Runs when `id` or `accessToken` changes
+  }, [id, accessToken]);
 
   return (
     <div className="p-6 ">

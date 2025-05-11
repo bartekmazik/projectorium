@@ -28,10 +28,10 @@ const mySchema = z.object({
   code: z.string().min(1, "Code is required"),
 });
 
-const JoinProject = () => {
+const JoinProject = ({ refetch }: any) => {
   const { accessToken } = useUser();
+  const { GetProjects } = refetch;
   const [open, setOpen] = useState(false);
-  const { refetch } = useProject();
 
   const form = useForm({
     resolver: zodResolver(mySchema),
@@ -56,8 +56,9 @@ const JoinProject = () => {
       }
 
       form.reset();
+      refetch();
+
       setOpen(false);
-      await refetch();
     } catch (error) {
       console.error("Error joining project:", error);
     }
@@ -106,14 +107,14 @@ const JoinProject = () => {
   );
 };
 
-const Toolbar = () => {
+const Toolbar = ({ refetch }: any) => {
   return (
     <div className="w-full h-16 ">
       <div className="flex items-center justify-between sm:justify-start gap-6 h-full sm:px-6">
         <Link href="/Dashboard/ProjectCreator">
           <Button>Create new project</Button>
         </Link>
-        <JoinProject />
+        <JoinProject refetch={refetch} />
         {/* <Button variant={"destructive"}>Delete project</Button> */}
       </div>
     </div>

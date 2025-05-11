@@ -37,10 +37,10 @@ function Note({ note }: { note: Note }) {
     <>
       <Button
         variant="ghost"
-        className="flex flex-row justify-between border-t rounded-none py-7"
+        className="flex flex-row justify-between border-t rounded-none py-7 cursor-default"
       >
         <div className="flex flex-col items-start">
-          <p>{note.title}</p>
+          <p className="truncate w-64 text-start"> {note.title}</p>
           <CardDescription>{noteDate}</CardDescription>
         </div>
       </Button>

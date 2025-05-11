@@ -6,7 +6,7 @@ import { Label } from "./ui/label";
 
 const Footer = () => {
   return (
-    <div className="w-screen h-12 mt-[10vh] flex flex-row justify-center items-center gap-2">
+    <div className="w-full h-12 flex flex-row mt-12  justify-center items-center gap-2">
       <Label>Bartłomiej Mazik 2025©</Label>
       <Link href="https://www.github.com/bartekmazik">
         <Image src="/github.svg" alt="github" width={20} height={20}></Image>

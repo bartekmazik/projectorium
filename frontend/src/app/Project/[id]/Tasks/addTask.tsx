@@ -33,6 +33,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { User } from "../page";
+import { Textarea } from "@/components/ui/textarea";
 
 const taskSchema = z.object({
   title: z.string().min(1, "Task title is required"),
@@ -150,7 +151,7 @@ const AddTask = ({ refetch }: { refetch: any }) => {
         <DialogTrigger asChild>
           <Button>Add Task</Button>
         </DialogTrigger>
-        <DialogContent className="w-full max-w-[90%] sm:max-w-[425px] p-4 sm:p-6 rounded-xl z-[10000]">
+        <DialogContent className="w-full max-w-[90vw] sm:max-w-[50vw] p-4 sm:p-6 rounded-xl z-[10000]">
           <DialogHeader>
             <DialogTitle>Create a Task</DialogTitle>
             <DialogDescription>
@@ -180,7 +181,7 @@ const AddTask = ({ refetch }: { refetch: any }) => {
                     <FormItem>
                       <FormLabel>Task Description</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Textarea {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -244,23 +245,25 @@ const AddTask = ({ refetch }: { refetch: any }) => {
                   <FormLabel>Assign to</FormLabel>
                   <div className="flex flex-col gap-2 mt-2">
                     {users.length > 0 ? (
-                      users.map((user: User) => (
-                        <label
-                          key={user.user.id}
-                          className="flex items-center gap-2"
-                        >
-                          <Checkbox
-                            checked={selectedUsers.includes(user.user.id)}
-                            onCheckedChange={() =>
-                              handleCheckboxChange(user.user.id)
-                            }
-                          />
-                          {`
+                      users
+                        .filter((u: User) => u.user.id !== user?.id)
+                        .map((user: User) => (
+                          <label
+                            key={user.user.id}
+                            className="flex items-center gap-2"
+                          >
+                            <Checkbox
+                              checked={selectedUsers.includes(user.user.id)}
+                              onCheckedChange={() =>
+                                handleCheckboxChange(user.user.id)
+                              }
+                            />
+                            {`
                           ${user.user.firstName} 
                           ${user.user.lastName}
                           `}
-                        </label>
-                      ))
+                          </label>
+                        ))
                     ) : (
                       <p>No users available</p>
                     )}

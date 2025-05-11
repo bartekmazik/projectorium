@@ -26,7 +26,7 @@ export default function Homepage() {
           It's simple! Create your account and start managing your projects
           today! 🤩
         </p>
-        <div className="flex gap-2">
+        <div className="flex gap-2 ">
           {isClient && !user && (
             <>
               <Link href="/auth/login">

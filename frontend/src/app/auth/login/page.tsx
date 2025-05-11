@@ -82,8 +82,8 @@ export default function Login() {
   };
 
   return (
-    <main className="flex justify-center items-center w-full h-screen p-4">
-      <Card className="min-w-[300px] max-w-[560px] w-[560px]">
+    <main className="flex justify-center pt-12 w-full max-h-screen p-4">
+      <Card className="min-w-[300px]  sm:max-w-[560px] w-full sm:w-[560px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <CardHeader>

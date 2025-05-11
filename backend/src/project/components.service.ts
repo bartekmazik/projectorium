@@ -32,6 +32,7 @@ export class ComponentsService {
     const rankingMembers = await this.prisma.projectUser.findMany({
       where: {
         projectId: projectId,
+        NOT: [{ role: Role.ADMIN }],
       },
       select: {
         user: {
@@ -149,12 +150,7 @@ export class ComponentsService {
     const promptContent = `You are an AI Mentor in a gamified project management app. Your role is to guide teams toward productivity, motivation, and collaboration. Based on the provided project data, tasks, and team performance, give insightful and constructive feedback.
 When users ask for help, provide:
 
-A brief analysis of their current project status.
-
-Encouraging and actionable advice on how to improve efficiency, resolve blockers, or meet deadlines.
-
-If applicable, suggest relevant rewards, badges, or team challenges based on the gamification system to boost engagement.
-U can use language which is in question.
+U should use language which is used in the question below.
 Try to keep the response in under 3-5 sentences.
 Keep the tone motivating, professional, yet friendly. Avoid generic answers—tailor responses to the user’s context.
 Here is the current project data: Project name: ${project.name} Project description: ${project.description} Team size: ${project._count.users} Project tasks: ${project.tasks.map(
@@ -368,6 +364,50 @@ Here is the current project data: Project name: ${project.name} Project descript
   }
 
   async getTasks(projectId: number, userId?: number) {
+    const userRole = await this.prisma.projectUser.findFirst({
+      where: {
+        projectId: projectId,
+        userId: userId,
+      },
+      select: {
+        role: true,
+      },
+    });
+    if (userRole.role === 'ADMIN') {
+      const tasks = await this.prisma.task.findMany({
+        where: {
+          projectId: projectId,
+        },
+        include: {
+          assignedTo: {
+            select: {
+              user: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                },
+              },
+            },
+          },
+          project: {
+            include: {
+              users: {
+                where: {
+                  userId: userId,
+                },
+                select: {
+                  role: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      return {
+        message: 'Tasks retrieved',
+        tasks,
+      };
+    }
     const tasks = await this.prisma.task.findMany({
       where: {
         projectId,

@@ -21,44 +21,44 @@ const Page = () => {
   const { accessToken } = useUser();
   const router = useRouter();
 
-  useEffect(() => {
-    const GetProjects = async () => {
-      try {
-        setIsLoading(true);
-        const res = await fetch("http://localhost:3333/project/projects", {
-          method: "GET",
+  const GetProjects = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch("http://localhost:3333/project/projects", {
+        method: "GET",
 
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken} ` || "",
-          },
-        });
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken} ` || "",
+        },
+      });
 
-        if (!res.ok) {
-          throw new Error(`Error: ${res.status}`);
-        }
-
-        const json = await res.json();
-
-        setProjects(json);
-        setTimeout(() => setIsLoading(false), 1000);
-      } catch (error) {
-        console.error("Failed to fetch projects:", error);
-        setProjects([]);
-        setTimeout(() => setIsLoading(false), 1000);
+      if (!res.ok) {
+        throw new Error(`Error: ${res.status}`);
       }
-    };
 
+      const json = await res.json();
+
+      setProjects(json);
+      setTimeout(() => setIsLoading(false), 1000);
+    } catch (error) {
+      console.error("Failed to fetch projects:", error);
+      setProjects([]);
+      setTimeout(() => setIsLoading(false), 1000);
+    }
+  };
+
+  useEffect(() => {
     GetProjects();
   }, [router]);
 
   return (
     <>
-      <Toolbar />
+      <Toolbar refetch={GetProjects} />
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div className="h-screen w-full flex flex-col sm:flex-row sm:p-4 gap-4">
+        <div className="h-full flex flex-col flex-wrap sm:flex-row sm:p-4 gap-4">
           {projects.length > 0 ? (
             projects.map((project) => (
               <ProjectCard

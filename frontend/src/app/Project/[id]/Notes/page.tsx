@@ -58,23 +58,31 @@ const Note = ({ note }: { note: Note }) => {
           variant={"ghost"}
           className="flex flex-col justify-start items-start"
         >
-          <Card className="w-full sm:min-w-96 min-h-48  hover:cursor-pointer">
+          <Card className="relative w-full sm:min-w-96 max-  min-h-48 h-full overflow-hidden  hover:cursor-pointer text-wrap">
             <CardHeader>
-              <CardTitle>{note.title}</CardTitle>
+              <CardTitle className="truncate max-w-[80vw] ">
+                {note.title}
+              </CardTitle>
               <CardDescription>{noteDate}</CardDescription>
             </CardHeader>
-            <CardContent>{note.description}</CardContent>
+            <CardContent className="line-clamp-3 break-words  max-w-[80vw] flex-grow">
+              {note.description}
+            </CardContent>
           </Card>
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-full max-w-[90%] p-4 sm:p-6 rounded-xl z-[10000] sm:w-[90vw]  sm:max-w-4xl">
-        <DialogHeader className="flex flex-col items-start">
-          <DialogTitle>{note.title}</DialogTitle>
+      <DialogContent className="overflow-y-scroll w-full max-w-[90%] max-h-[90%] p-4 sm:p-6 rounded-xl z-[10000] sm:w-[90vw]  sm:max-w-8xl">
+        <DialogHeader className="flex flex-col items-start ">
+          <DialogTitle className="break-words max-w-7xl">
+            {note.title}
+          </DialogTitle>
           <DialogDescription>
             {noteDate} by {note.createdBy.firstName} {note.createdBy.lastName}
           </DialogDescription>
         </DialogHeader>
-        <Label className="min-h-[30vh]">{note.description}</Label>
+        <Label className="min-h-[30vh] break-words max-w-7xl">
+          {note.description}
+        </Label>
       </DialogContent>
     </Dialog>
   );
@@ -102,7 +110,9 @@ const Notes = () => {
       console.error("Error fetching project:", error);
     }
   };
-  fetchData();
+  useEffect(() => {
+    fetchData();
+  }, [id, accessToken]);
 
   return (
     <div className="my-4 sm:my-8 flex flex-col gap-4">
@@ -117,7 +127,7 @@ const Notes = () => {
         </div>
         <AddNote refetch={fetchData} />
       </div>
-      <div className="flex flex-col sm:flex-row justify-start items-center gap-2">
+      <div className="flex flex-col sm:flex-row justify-start flex-wrap items-center gap-2">
         {notes && notes.length > 0 ? (
           notes.map((note: Note, i) => {
             return <Note key={note.id} note={note} />;

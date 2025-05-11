@@ -112,7 +112,9 @@ const MilestonesCard = ({
       <CardContent className="py-4">
         <div className="p-3 bg-primary/10 rounded-md mb-6">
           {currentStage ? (
-            <p className="font-medium text-primary">{currentStage?.title}</p>
+            <p className="font-medium text-primary break-words line-clamp-4 ">
+              {currentStage?.title}
+            </p>
           ) : (
             <div>No objectives yet</div>
           )}
@@ -124,13 +126,18 @@ const MilestonesCard = ({
             </h3>
             <div className="space-y-3">
               <div className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                <div>
+                <div className="text-wrap overflow-y-scroll">
                   {completedStages.length > 0 &&
                     completedStages.map((stage) => (
-                      <p key={stage.id} className="font-medium">
-                        {stage.title}
-                      </p>
+                      <div className="flex flex-row items-start gap-2">
+                        <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                        <p
+                          key={stage.id}
+                          className="font-medium break-words  w-80 pb-3"
+                        >
+                          {stage.title}
+                        </p>
+                      </div>
                     ))}
                 </div>
               </div>

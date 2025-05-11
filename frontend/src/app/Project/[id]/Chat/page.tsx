@@ -1,4 +1,5 @@
 "use client";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -54,6 +55,7 @@ const Message = React.forwardRef<
 const Chat = () => {
   const { user, accessToken } = useUser();
   const [messages, setMessages] = useState<Message[]>();
+  const [isLoading, setIsLoading] = useState(false);
   const chatRef = useRef(null);
   const { id } = useParams();
   const form = useForm({
@@ -86,12 +88,13 @@ const Chat = () => {
   }, [id]);
   useEffect(() => {
     if (messages?.length > 0) {
-      chatRef.current.scrollIntoView({ behavior: "smooth" }); //Use scrollIntoView to automatically scroll to my ref
+      chatRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages?.length]);
 
   const onSubmit = async (data: { message: string }) => {
     try {
+      setIsLoading(!isLoading);
       const object = { userid: user?.id, question: data.message };
       const res = await fetch(`http://localhost:3333/project/${id}/chat`, {
         method: "POST",
@@ -107,7 +110,7 @@ const Chat = () => {
       if (!res.ok) {
         throw new Error("Failed to send message");
       }
-
+      setIsLoading(false);
       form.reset();
     } catch (error) {
       console.error("Error sending message:", error);
@@ -137,35 +140,41 @@ const Chat = () => {
             );
           })}
       </ScrollArea>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex w-full gap-4"
-        >
-          <div className="flex-grow">
-            <FormField
-              control={form.control}
-              name="message"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      className="w-full"
-                      placeholder="Your question"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+      {isLoading ? (
+        <div className="w-full flex flex-row items-center justify-center text-secondary bg-primary font-semibold rounded-lg shadow-lg h-12">
+          Loading...
+        </div>
+      ) : (
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex w-full gap-4"
+          >
+            <div className="flex-grow">
+              <FormField
+                control={form.control}
+                name="message"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        className="w-full"
+                        placeholder="Your question"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <Button type="submit" className="w-32">
-            Send
-          </Button>
-        </form>
-      </Form>
+            <Button type="submit" className="w-32">
+              Send
+            </Button>
+          </form>
+        </Form>
+      )}
     </div>
   );
 };

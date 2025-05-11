@@ -8,7 +8,7 @@ import UserAvatar from "@/components/UserAvatar";
 import { useUser } from "@/lib/AuthProvider";
 
 const ProfileCard = () => {
-  const { user, loading } = useUser(); // Assuming isLoading is provided by useUser hook
+  const { user, loading } = useUser();
   const [profile, setProfile] = useState({
     firstName: "",
     lastName: "",
@@ -32,7 +32,7 @@ const ProfileCard = () => {
   }, [user]);
 
   if (loading) {
-    return <div>Loading...</div>; // Placeholder while loading
+    return <div>Loading...</div>;
   }
 
   const progressPercentage =
