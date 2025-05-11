@@ -57,14 +57,17 @@ const AddNote = ({ refetch }: { refetch: any }) => {
         projectId: Number(id),
       };
 
-      const res = await fetch(`http://localhost:3333/project/${id}/note`, {
-        method: "POST",
-        body: JSON.stringify(noteObject),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/project/${id}/note`,
+        {
+          method: "POST",
+          body: JSON.stringify(noteObject),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (!res.ok) {
         throw new Error("Failed to create note");

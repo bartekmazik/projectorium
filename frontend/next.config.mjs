@@ -6,7 +6,7 @@ const nextConfig = {
     instrumentationHook: true,
   },
   env: {
-    URL: process.env.URL,
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
 };
 

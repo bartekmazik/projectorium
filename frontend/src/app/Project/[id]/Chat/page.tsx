@@ -96,14 +96,17 @@ const Chat = () => {
     try {
       setIsLoading(!isLoading);
       const object = { userid: user?.id, question: data.message };
-      const res = await fetch(`http://localhost:3333/project/${id}/chat`, {
-        method: "POST",
-        body: JSON.stringify(object),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/project/${id}/chat`,
+        {
+          method: "POST",
+          body: JSON.stringify(object),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       const json = await res.json();
       console.log(json.message);
       fetchData();

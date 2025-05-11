@@ -66,16 +66,19 @@ const useProject = () => {
   const fetchProject = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`http://localhost:3333/project/${id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}` || "",
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/project/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}` || "",
+          },
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to fetch project");
 
       const json = await res.json();
-      console.log(json);
+
       setProject(json.project);
     } catch (error) {
       console.error("Error fetching project:", error);

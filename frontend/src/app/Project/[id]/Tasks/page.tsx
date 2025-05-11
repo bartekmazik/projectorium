@@ -82,7 +82,7 @@ function Task({
       const object = { status: newStatus, taskid: task.id };
 
       const res = await fetch(
-        `http://localhost:3333/project/${id}/changetaskstatus`,
+        `${process.env.NEXT_PUBLIC_API_URL}/project/${id}/changetaskstatus`,
         {
           method: "POST",
           body: JSON.stringify(object),

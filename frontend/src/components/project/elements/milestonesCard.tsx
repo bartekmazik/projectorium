@@ -53,14 +53,17 @@ const MilestonesCard = ({
     if (!newMilestone) return;
     const milestoneData = { title: newMilestone };
     try {
-      await fetch(`http://localhost:3333/project/${id}/milestone/add`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(milestoneData),
-      });
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/project/${id}/milestone/add`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(milestoneData),
+        }
+      );
       toast.success("Milestone added successfully", {
         description: `The milestone "${newMilestone}" was added.`,
       });

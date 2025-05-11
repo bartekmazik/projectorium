@@ -71,11 +71,14 @@ const AddTask = ({ refetch }: { refetch: any }) => {
   useEffect(() => {
     const GetUsers = async () => {
       try {
-        const res = await fetch(`http://localhost:3333/project/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}` || "",
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/project/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}` || "",
+            },
+          }
+        );
 
         if (!res.ok) {
           throw new Error(`Error: ${res.status}`);

@@ -72,7 +72,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       }
 
       try {
-        const res = await fetch("http://localhost:3333/users/me", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

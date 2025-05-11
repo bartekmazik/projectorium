@@ -147,7 +147,7 @@ export class ComponentsService {
     if (!project) {
       return 'project does not exist';
     }
-    const promptContent = `You are an AI Mentor in a gamified project management app. Your role is to guide teams toward productivity, motivation, and collaboration. Based on the provided project data, tasks, and team performance, give insightful and constructive feedback.
+    const promptContent = `You are an AI Mentor in a gamified project management app. Based on the provided project data, tasks, and team performance, answer the question given by user.
 When users ask for help, provide:
 
 U should use language which is used in the question below.
@@ -158,7 +158,8 @@ Here is the current project data: Project name: ${project.name} Project descript
         return task.title;
       },
     )}
-    Here is the question you need to answer: ${question}`;
+    Here is the question you need to answer: ${question.question}`;
+
     const message = await this.openai.chatCompletion({
       prompt: promptContent,
     });

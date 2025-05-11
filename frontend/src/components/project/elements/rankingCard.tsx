@@ -36,12 +36,15 @@ const RankingCard = () => {
 
   useEffect(() => {
     const fetchRanking = async () => {
-      const res = await fetch(`http://localhost:3333/project/${id}/ranking`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/project/${id}/ranking`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       const json = await res.json();
 
       setRanking(json);

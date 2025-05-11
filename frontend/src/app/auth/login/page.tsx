@@ -55,7 +55,7 @@ export default function Login() {
 
   const onSubmit = async (prop: any) => {
     const object = { email: prop.email, password: prop.password };
-    const res = await fetch("http://localhost:3333/auth/signin", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, {
       method: "POST",
       body: JSON.stringify(object),
       headers: {
@@ -68,17 +68,13 @@ export default function Login() {
 
     const json = await res.json();
     setAccessToken(json.access_token);
-    //authContext.setAuthToken(json.data.jwtToken);
+
     toast.success("Signed in successfuly!", {
       className:
         "!border-primary !bg-gradient-to-t !from-[#00ff0006] !to-[#00ff0002]",
       duration: 5 * 1000,
     });
     router.push("/");
-  };
-
-  const transformOutput = (e: boolean) => {
-    return e;
   };
 
   return (

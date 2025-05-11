@@ -74,7 +74,7 @@ export default function CreateProject() {
   });
 
   const onSubmit = async (prop: any) => {
-    const res = await fetch("http://localhost:3333/project/create", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/project/create`, {
       method: "POST",
       body: JSON.stringify(prop),
       headers: {

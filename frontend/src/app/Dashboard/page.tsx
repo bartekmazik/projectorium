@@ -24,14 +24,17 @@ const Page = () => {
   const GetProjects = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch("http://localhost:3333/project/projects", {
-        method: "GET",
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/project/projects`,
+        {
+          method: "GET",
 
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken} ` || "",
-        },
-      });
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken} ` || "",
+          },
+        }
+      );
 
       if (!res.ok) {
         throw new Error(`Error: ${res.status}`);

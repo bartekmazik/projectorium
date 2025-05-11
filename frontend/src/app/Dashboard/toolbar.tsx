@@ -42,14 +42,17 @@ const JoinProject = ({ refetch }: any) => {
 
   const onSubmit = async (data: { code: string }) => {
     try {
-      const res = await fetch("http://localhost:3333/project/join", {
-        method: "POST",
-        body: JSON.stringify({ code: data.code }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/project/join`,
+        {
+          method: "POST",
+          body: JSON.stringify({ code: data.code }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (!res.ok) {
         throw new Error("Failed to join project");
