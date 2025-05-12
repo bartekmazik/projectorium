@@ -30,7 +30,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <div className="flex flex-row items-between min-h-[90vh]">
               <div
                 className={cn(
-                  "sm:max-w-screen-2xl w-full px-4 sm:mx-28 mt-20",
+                  "sm:max-w-screen-4xl w-full px-4 sm:mx-28 mt-20",
                   inter.variable
                 )}
               >

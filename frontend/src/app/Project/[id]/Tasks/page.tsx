@@ -203,12 +203,15 @@ const page = () => {
 
   const fetchData = async () => {
     try {
-      const res = await fetch(`http://localhost:3333/project/${id}/task`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}` || "",
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/project/${id}/task`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}` || "",
+          },
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to fetch tasks");
 
