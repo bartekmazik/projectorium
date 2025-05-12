@@ -4,7 +4,6 @@ import { Navbar } from "@/components/navbar";
 
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
-import Sidebar from "@/components/sidebar";
 
 import "@/styles/globals.css";
 import { UserProvider } from "@/lib/AuthProvider";
