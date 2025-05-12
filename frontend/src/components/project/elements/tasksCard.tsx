@@ -49,7 +49,9 @@ const Task = ({
 };
 
 const TasksCard = ({ tasks = [] }: { tasks?: TaskType[] }) => {
-  const [completedTasks, setCompletedTasks] = useState<number>();
+  const filteredTasks = tasks.filter((task) => task.status !== "COMPLETED");
+  const completedTasks = tasks.filter((task) => task.status === "COMPLETED");
+
   const { accessToken } = useUser();
   const { id } = useParams();
 
@@ -64,8 +66,8 @@ const TasksCard = ({ tasks = [] }: { tasks?: TaskType[] }) => {
         </CardHeader>
         <CardContent className="p-1">
           <ul className="flex flex-col border-t ">
-            {tasks.length > 0 ? (
-              tasks.map((task: TaskType) => (
+            {filteredTasks.length > 0 ? (
+              filteredTasks.map((task: TaskType) => (
                 <Task
                   title={task.title}
                   points={task.points}
@@ -81,7 +83,7 @@ const TasksCard = ({ tasks = [] }: { tasks?: TaskType[] }) => {
           </ul>
         </CardContent>
         <CardFooter className="w-full flex flex-row justify-center my-4">
-          <Label>Completed tasks: {completedTasks}</Label>
+          <Label>Completed tasks: {completedTasks.length}</Label>
         </CardFooter>
       </Card>
     </>
