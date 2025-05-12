@@ -63,7 +63,7 @@ const TasksCard = ({ tasks = [] }: { tasks?: TaskType[] }) => {
           </Link>
         </CardHeader>
         <CardContent className="p-1">
-          <ul className="flex flex-col border-t">
+          <ul className="flex flex-col border-t ">
             {tasks.length > 0 ? (
               tasks.map((task: TaskType) => (
                 <Task
@@ -74,7 +74,7 @@ const TasksCard = ({ tasks = [] }: { tasks?: TaskType[] }) => {
                 />
               ))
             ) : (
-              <Label className="flex justify-center items-center text-gray-500">
+              <Label className="flex justify-center items-center text-gray-500 py-8 border-b">
                 No active tasks
               </Label>
             )}

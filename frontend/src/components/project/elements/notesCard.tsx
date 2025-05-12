@@ -98,7 +98,7 @@ const NotesCard = () => {
               {notes && notes.length > 0 ? (
                 notes.map((note: Note, i) => <Note note={note} key={i} />)
               ) : (
-                <Label className="flex  justify-center items-center text-gray-500">
+                <Label className="flex  justify-center items-center text-gray-500 pt-8">
                   No notes
                 </Label>
               )}

@@ -70,7 +70,9 @@ const RankingCard = () => {
                   />
                 ))
               ) : (
-                <div>Brak rankingu</div>
+                <Label className="text-gray-500 border-t py-8 flex flex-row justify-center items-center">
+                  Invite more users to see ranking!
+                </Label>
               )}
             </ul>
           </CardContent>
