@@ -67,12 +67,15 @@ const Chat = () => {
 
   const fetchData = async () => {
     try {
-      const res = await fetch(`http://localhost:3333/project/${id}/chat`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}` || "",
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/project/${id}/chat`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}` || "",
+          },
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to fetch project");
 
@@ -108,7 +111,6 @@ const Chat = () => {
         }
       );
       const json = await res.json();
-      console.log(json.message);
       fetchData();
       if (!res.ok) {
         throw new Error("Failed to send message");
