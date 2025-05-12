@@ -126,14 +126,17 @@ const AddTask = ({ refetch }: { refetch: any }) => {
         dueDate: data.dueDate.toISOString(),
       };
 
-      const res = await fetch(`http://localhost:3333/project/${id}/task`, {
-        method: "POST",
-        body: JSON.stringify(taskObject),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/project/${id}/task`,
+        {
+          method: "POST",
+          body: JSON.stringify(taskObject),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (!res.ok) {
         throw new Error("Failed to create task");
