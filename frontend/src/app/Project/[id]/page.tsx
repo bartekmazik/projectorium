@@ -6,7 +6,7 @@ import TasksCard from "@/components/project/elements/tasksCard";
 import CalendarCard from "@/components/project/elements/calendarCard";
 import LinksCard from "@/components/project/elements/linksCard";
 import NotesCard from "@/components/project/elements/notesCard";
-import FinancesCard from "@/components/project/elements/financesCard";
+
 import { useParams } from "next/navigation";
 import { useUser } from "@/lib/AuthProvider";
 import RankingCard from "@/components/project/elements/rankingCard";
