@@ -56,7 +56,7 @@ const Chat = () => {
   const { user, accessToken } = useUser();
   const [messages, setMessages] = useState<Message[]>();
   const [isLoading, setIsLoading] = useState(false);
-  const chatRef = useRef(null);
+  const chatRef = useRef<HTMLDivElement>(null);
   const { id } = useParams();
   const form = useForm({
     resolver: zodResolver(mySchema),
@@ -87,7 +87,7 @@ const Chat = () => {
     fetchData();
   }, [id]);
   useEffect(() => {
-    if (messages?.length > 0) {
+    if (messages && messages?.length > 0 && chatRef.current) {
       chatRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages?.length]);

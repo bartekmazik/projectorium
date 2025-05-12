@@ -17,20 +17,7 @@ import ProfileCard from "@/components/project/elements/profileCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MilestonesCard from "@/components/project/elements/milestonesCard";
 import useProject from "@/app/hooks/useProject";
-interface Milestone {
-  id: number;
-  title: string;
-  completedOn: Date;
-  projectId: number;
-  status: string;
-}
-interface Project {
-  name: string;
-  description: string;
-  projectCode: string;
-  users: User[];
-  milestones: Milestone[];
-}
+
 export interface User {
   user: {
     email: string;
@@ -41,9 +28,6 @@ export interface User {
   role: string;
 }
 const Page = () => {
-  const { id } = useParams();
-  const { accessToken } = useUser();
-
   const { project, isLoading, refetch } = useProject();
 
   return isLoading ? (
@@ -59,12 +43,18 @@ const Page = () => {
 
       <div className="flex flex-col sm:grid sm:grid-cols-3 p-5 overflow-visible gap-3">
         <ProfileCard />
-        <TeamCard users={project?.users || []} code={project?.projectCode} />
-        <TasksCard tasks={project?.tasks} />
+        <TeamCard
+          users={project?.users || []}
+          code={project?.projectCode || "0"}
+        />
+        <TasksCard tasks={project?.tasks || []} />
         <RankingCard />
         <NotesCard />
         <MentorCard />
-        <MilestonesCard milestones={project?.milestones} refetch={refetch} />
+        <MilestonesCard
+          milestones={project?.milestones || []}
+          refetch={refetch}
+        />
         {/* <CalendarCard />
         <LinksCard />
         <FinancesCard /> */}

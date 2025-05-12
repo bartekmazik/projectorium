@@ -210,7 +210,6 @@ const AddTask = ({ refetch }: { refetch: any }) => {
                   )}
                 />
 
-                {/* Calendar Component */}
                 <FormField
                   control={form.control}
                   name="dueDate"
@@ -249,7 +248,7 @@ const AddTask = ({ refetch }: { refetch: any }) => {
                   <div className="flex flex-col gap-2 mt-2">
                     {users.length > 0 ? (
                       users
-                        .filter((u: User) => u.user.id !== user?.id)
+                        .filter((u: User) => u.user.id !== Number(user?.id))
                         .map((user: User) => (
                           <label
                             key={user.user.id}
