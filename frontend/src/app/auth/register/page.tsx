@@ -72,6 +72,7 @@ export default function Login() {
       firstName: prop.firstName,
       lastName: prop.lastName,
     };
+    console.log(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`);
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
       method: "POST",
       body: JSON.stringify(object),
